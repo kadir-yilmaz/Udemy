@@ -20,6 +20,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
@@ -27,6 +34,8 @@ spec:
           value: "http://+:8080"
         - name: RabbitMQUrl
           value: "host.docker.internal"
+        - name: RabbitMQPort
+          value: "5673"
         - name: EmailSettings__SmtpUsername
           valueFrom:
             secretKeyRef:

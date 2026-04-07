@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -15,7 +16,12 @@ namespace Udemy.NewIdentityServer
             using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                Log.Information("Migrating ApplicationDbContext...");
                 context.Database.Migrate();
+
+                var persistedGrantContext = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+                Log.Information("Migrating PersistedGrantDbContext...");
+                persistedGrantContext.Database.Migrate();
 
                 var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var alice = userMgr.FindByNameAsync("alice").Result;
@@ -26,6 +32,8 @@ namespace Udemy.NewIdentityServer
                         UserName = "alice",
                         Email = "AliceSmith@email.com",
                         EmailConfirmed = true,
+                        Name = "Alice",
+                        Surname = "Smith"
                     };
                     var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                     if (!result.Succeeded)
@@ -43,7 +51,7 @@ namespace Udemy.NewIdentityServer
                     {
                         throw new Exception(result.Errors.First().Description);
                     }
-                    Log.Debug("alice created");
+                    Log.Information("alice created");
                 }
                 else
                 {
@@ -57,7 +65,9 @@ namespace Udemy.NewIdentityServer
                     {
                         UserName = "bob",
                         Email = "BobSmith@email.com",
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        Name = "Bob",
+                        Surname = "Smith"
                     };
                     var result = userMgr.CreateAsync(bob, "Pass123$").Result;
                     if (!result.Succeeded)
@@ -76,7 +86,7 @@ namespace Udemy.NewIdentityServer
                     {
                         throw new Exception(result.Errors.First().Description);
                     }
-                    Log.Debug("bob created");
+                    Log.Information("bob created");
                 }
                 else
                 {
@@ -86,3 +96,4 @@ namespace Udemy.NewIdentityServer
         }
     }
 }
+

@@ -47,7 +47,7 @@ namespace Udemy.WebUI.Services.Concrete
 
             if (disco.IsError)
             {
-                throw disco.Exception;
+                throw disco.Exception ?? new Exception($"Discovery error: {disco.Error}");
             }
 
             var clientCredentialTokenRequest = new ClientCredentialsTokenRequest

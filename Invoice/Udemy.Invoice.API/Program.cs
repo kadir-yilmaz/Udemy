@@ -17,6 +17,11 @@ builder.Services.Configure<EmailSettings>(
 // Email Service
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+var rabbitMqHost = builder.Configuration["RabbitMQUrl"] ?? "localhost";
+var rabbitMqPort = ushort.TryParse(builder.Configuration["RabbitMQPort"], out var parsedRabbitMqPort)
+    ? parsedRabbitMqPort
+    : (ushort)5672;
+
 // MassTransit + RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
@@ -24,7 +29,7 @@ builder.Services.AddMassTransit(x =>
     
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        cfg.Host(rabbitMqHost, rabbitMqPort, "/", host =>
         {
             host.Username("guest");
             host.Password("guest");

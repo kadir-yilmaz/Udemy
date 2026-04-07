@@ -26,7 +26,7 @@ namespace Udemy.WebUI.Helpers
             // Fix path separator if needed
             photoUrl = photoUrl.Replace("\\", "/");
 
-            var baseUri = _serviceApiSettings.PhotoStockUri.TrimEnd('/');
+            var baseUri = (_serviceApiSettings.PhotoStockPublicUri ?? _serviceApiSettings.PhotoStockUri).TrimEnd('/');
             var path = photoUrl.TrimStart('/');
 
             // If path doesn't start with photos/, add the prefix

@@ -1,24 +1,29 @@
+@{
+    var appVersion = Environment.GetEnvironmentVariable("APP_VERSION") ?? "local-dev";
+    var shortVersion = appVersion.Length > 12 ? appVersion[..12] : appVersion;
+}
+
 <footer class="bg-dark text-white pt-5 pb-3 mt-auto">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <h6 class="fw-bold mb-3">Hakkında</h6>
+                <h6 class="fw-bold mb-3">Hakkinda</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Hakkımızda</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Hakkimizda</a></li>
                     <li class="mb-2"><a href="#" class="text-white text-decoration-none">Kariyer</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">İletişim</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Iletisim</a></li>
                     <li class="mb-2"><a href="#" class="text-white text-decoration-none">Blog</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Yatırımcılar</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Yatirimcilar</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h6 class="fw-bold mb-3">Udemy'yi Keşfedin</h6>
+                <h6 class="fw-bold mb-3">Udemy'yi Kesfedin</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Uygulamayı edinin</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Udemy'de Eğitim Verin</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Planlar ve Fiyatlandırma</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">İş Ortaklığı</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Yardım ve Destek</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Uygulamayi edinin</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Udemy'de Egitim Verin</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Planlar ve Fiyatlandirma</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Is Ortakligi</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Yardim ve Destek</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
@@ -28,30 +33,33 @@
                 </ul>
             </div>
             <div class="col-md-3">
-                <h6 class="fw-bold mb-3">Yasal Konular ve Erişilebilirlik</h6>
+                <h6 class="fw-bold mb-3">Yasal Konular ve Erisilebilirlik</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Erişilebilirlik beyanı</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Gizlilik politikası</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Site haritası</a></li>
-                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Şartlarımız</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Erisilebilirlik beyani</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Gizlilik politikasi</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Site haritasi</a></li>
+                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Sartlarimiz</a></li>
                 </ul>
             </div>
         </div>
-        
+
         <hr class="border-secondary my-4" />
-        
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <a href="/" class="text-decoration-none me-3">
-                    <h4 class="fw-bold text-white m-0">ûdemy</h4>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+                <a href="/" class="text-decoration-none me-md-3">
+                    <h4 class="fw-bold text-white m-0">udemy</h4>
                 </a>
                 <small class="text-secondary">&copy; 2026 Udemy, Inc.</small>
+                <small class="text-info-emphasis bg-light-subtle rounded px-2 py-1">
+                    Version: <span class="font-monospace">@shortVersion</span>
+                </small>
             </div>
-            
+
             <div class="d-flex align-items-center">
-                <a href="#" class="text-secondary text-decoration-none me-4 small">Çerez ayarları</a>
+                <a href="#" class="text-secondary text-decoration-none me-4 small">Cerez ayarlari</a>
                 <a href="#" class="text-white text-decoration-none d-flex align-items-center">
-                    <i class="bi bi-globe me-2"></i> Türkçe
+                    <i class="bi bi-globe me-2"></i> Turkce
                 </a>
             </div>
         </div>

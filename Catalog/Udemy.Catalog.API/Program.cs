@@ -35,12 +35,17 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("DatabaseOptions"));
 
+var rabbitMqHost = builder.Configuration["RabbitMQUrl"] ?? "localhost";
+var rabbitMqPort = ushort.TryParse(builder.Configuration["RabbitMQPort"], out var parsedRabbitMqPort)
+    ? parsedRabbitMqPort
+    : (ushort)5672;
+
 // MassTransit + RabbitMQ (CourseNameChanged event publish için)
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        cfg.Host(rabbitMqHost, rabbitMqPort, "/", host =>
         {
             host.Username("guest");
             host.Password("guest");

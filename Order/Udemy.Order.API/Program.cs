@@ -56,6 +56,11 @@ builder.Services.AddDbContext<OrderDbContext>(options =>
 builder.Services.AddMediatR(cfg => 
     cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommandHandler).Assembly));
 
+var rabbitMqHost = builder.Configuration["RabbitMQUrl"] ?? "localhost";
+var rabbitMqPort = ushort.TryParse(builder.Configuration["RabbitMQPort"], out var parsedRabbitMqPort)
+    ? parsedRabbitMqPort
+    : (ushort)5672;
+
 
 
 // MassTransit + RabbitMQ (Event consumers)
@@ -67,7 +72,7 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        cfg.Host(rabbitMqHost, rabbitMqPort, "/", host =>
         {
             host.Username("guest");
             host.Password("guest");

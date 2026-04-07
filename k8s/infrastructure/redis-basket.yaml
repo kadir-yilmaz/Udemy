@@ -1,0 +1,171 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: udemy-basket-redis
+  labels:
+    app: udemy-basket-redis
+spec:
+  type: NodePort
+  selector:
+    app: udemy-basket-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+      nodePort: 30379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udemy-basket-redis-headless
+  labels:
+    app: udemy-basket-redis
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    app: udemy-basket-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udemy-basket-redis-sentinel
+  labels:
+    app: udemy-basket-redis-sentinel
+spec:
+  type: NodePort
+  selector:
+    app: udemy-basket-redis-sentinel
+  ports:
+    - protocol: TCP
+      port: 26379
+      targetPort: 26379
+      nodePort: 32379
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: udemy-basket-redis
+spec:
+  serviceName: udemy-basket-redis-headless
+  podManagementPolicy: Parallel
+  replicas: 3
+  selector:
+    matchLabels:
+      app: udemy-basket-redis
+  template:
+    metadata:
+      labels:
+        app: udemy-basket-redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis
+        image: redis:7
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            ordinal="${HOSTNAME##*-}"
+            self_host="${HOSTNAME}.udemy-basket-redis-headless"
+            default_master="udemy-basket-redis-0.udemy-basket-redis-headless"
+            sentinel_master="$(redis-cli -h udemy-basket-redis-sentinel -p 26379 SENTINEL get-master-addr-by-name basket-redis-set 2>/dev/null | head -n 1 || true)"
+
+            if [ -n "$sentinel_master" ]; then
+              master_host="$sentinel_master"
+            else
+              master_host="$default_master"
+            fi
+
+            if [ -n "$sentinel_master" ] && { [ "$sentinel_master" = "$self_host" ] || [ "$sentinel_master" = "$HOSTNAME" ]; }; then
+              echo "Sentinel still points to this pod as master. Waiting to allow a failover decision..."
+              sleep 15
+              sentinel_master="$(redis-cli -h udemy-basket-redis-sentinel -p 26379 SENTINEL get-master-addr-by-name basket-redis-set 2>/dev/null | head -n 1 || true)"
+              if [ -n "$sentinel_master" ]; then
+                master_host="$sentinel_master"
+              fi
+            fi
+
+            if [ "$ordinal" = "0" ] && [ -z "$sentinel_master" ]; then
+              exec redis-server --appendonly yes --protected-mode no
+            fi
+
+            if [ "$self_host" = "$master_host" ] || [ "$HOSTNAME" = "$master_host" ]; then
+              exec redis-server --appendonly yes --protected-mode no
+            fi
+
+            exec redis-server --appendonly yes --protected-mode no --replicaof "$master_host" 6379
+        ports:
+        - containerPort: 6379
+        readinessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udemy-basket-redis-sentinel
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: udemy-basket-redis-sentinel
+  template:
+    metadata:
+      labels:
+        app: udemy-basket-redis-sentinel
+    spec:
+      containers:
+      - name: redis-sentinel
+        image: redis:7
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            cat <<'EOF' > /tmp/sentinel.conf
+            port 26379
+            bind 0.0.0.0
+            protected-mode no
+            sentinel resolve-hostnames yes
+            sentinel announce-hostnames yes
+            sentinel monitor basket-redis-set udemy-basket-redis-0.udemy-basket-redis-headless 6379 2
+            sentinel down-after-milliseconds basket-redis-set 5000
+            sentinel failover-timeout basket-redis-set 10000
+            sentinel parallel-syncs basket-redis-set 1
+            EOF
+            exec redis-sentinel /tmp/sentinel.conf
+        ports:
+        - containerPort: 26379
+        readinessProbe:
+          exec:
+            command: ["redis-cli", "-p", "26379", "ping"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          exec:
+            command: ["redis-cli", "-p", "26379", "ping"]
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"

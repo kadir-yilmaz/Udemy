@@ -1,4 +1,4 @@
-﻿using Serilog;
+using Serilog;
 using Udemy.NewIdentityServer;
 
 Log.Logger = new LoggerConfiguration()
@@ -20,15 +20,8 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    // this seeding is only for the template to bootstrap the DB and users.
-    // in production you will likely want a different approach.
-    if (args.Contains("/seed"))
-    {
-        Log.Information("Seeding database...");
-        SeedData.EnsureSeedData(app);
-        Log.Information("Done seeding database. Exiting.");
-        return;
-    }
+    // Auto-run seeding at startup for development/K8s consistency
+    SeedData.EnsureSeedData(app);
 
     app.Run();
 }

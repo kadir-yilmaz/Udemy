@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5011
+          "Host": "catalog-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/catalog/{everything}",
@@ -22,8 +22,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5012
+          "Host": "photostock-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/photostock/{everything}",
@@ -39,8 +39,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5013
+          "Host": "basket-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/basket/{everything}",
@@ -56,8 +56,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5014
+          "Host": "discount-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/discount/{everything}",
@@ -73,8 +73,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5015
+          "Host": "order-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/order/{everything}",
@@ -90,8 +90,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5016
+          "Host": "fakepayment-api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/services/fakepayment/{everything}",

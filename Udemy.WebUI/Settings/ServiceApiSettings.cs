@@ -5,6 +5,7 @@ namespace Udemy.WebUI.Settings
         public string IdentityBaseUri { get; set; }
         public string GatewayBaseUri { get; set; }
         public string PhotoStockUri { get; set; }
+        public string? PhotoStockPublicUri { get; set; }
 
         public ServiceApi Catalog { get; set; }
         public ServiceApi PhotoStock { get; set; }

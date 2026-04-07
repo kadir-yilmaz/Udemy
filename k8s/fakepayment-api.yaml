@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fakepayment-api
+  labels:
+    app: fakepayment-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fakepayment-api
+  template:
+    metadata:
+      labels:
+        app: fakepayment-api
+    spec:
+      containers:
+      - name: fakepayment-api
+        image: fakepayment-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+        - name: ASPNETCORE_URLS
+          value: "http://+:8080"
+        - name: IdentityServerURL
+          value: "http://identityserver:8080"
+        - name: RabbitMQUrl
+          value: "host.docker.internal"
+        - name: RabbitMQPort
+          value: "5673"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fakepayment-api
+spec:
+  type: NodePort
+  selector:
+    app: fakepayment-api
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30016

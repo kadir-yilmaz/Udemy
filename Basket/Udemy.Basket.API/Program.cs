@@ -81,7 +81,7 @@ builder.Services.Configure<RedisOptions>(builder.Configuration.GetSection("Redis
 builder.Services.AddSingleton<RedisService>(sp =>
 {
     var redisSettings = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
-    var redis = new RedisService(redisSettings.Host, redisSettings.Port);
+    var redis = new RedisService(redisSettings);
     redis.Connect();
     return redis;
 });

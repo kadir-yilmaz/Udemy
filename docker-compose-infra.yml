@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  udemy-mongodb:
+    image: mongo:latest
+    container_name: udemy-catalog-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - udemy-catalog-mongodb-data:/data/db
+
+  udemy-discount-postgres:
+    image: postgres:15
+    container_name: udemy-discount-postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Password12*
+      POSTGRES_DB: discountdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - udemy-discount-postgres-data:/var/lib/postgresql/data
+
+  udemy-order-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: udemy-order-sqlserver
+    environment:
+      SA_PASSWORD: Password12*
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+    ports:
+      - "1444:1433"
+    volumes:
+      - udemy-order-sqlserver-data:/var/opt/mssql
+
+  udemy-identity-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: udemy-identity-sqlserver
+    environment:
+      SA_PASSWORD: Password12*
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - udemy-identity-sqlserver-data:/var/opt/mssql
+
+  udemy-rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: udemy-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - udemy-rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  udemy-catalog-mongodb-data:
+  udemy-discount-postgres-data:
+  udemy-order-sqlserver-data:
+  udemy-identity-sqlserver-data:
+  udemy-rabbitmq-data:

@@ -2,27 +2,139 @@ name: Local K8s Deploy
 
 on:
   push:
-    branches: [ "main", "master" ]
-  workflow_dispatch: # Allows manual trigger
+    branches: ["main", "master"]
+  workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy to Local Kubernetes
-    runs-on: self-hosted  # <--- Crucial: Runs on your local machine runner
-    
+    name: Deploy To Local Kubernetes
+    runs-on: self-hosted
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Build Docker Image
+    - name: Verify Tooling
+      shell: powershell
       run: |
-        docker build -t invoice-api:latest -f Invoice/Udemy.Invoice.API/Dockerfile .
+        docker version
+        kubectl version --client
+        kubectl get nodes
 
-    - name: Apply Kubernetes Manifests
+    - name: Start Compose Infrastructure
+      shell: powershell
       run: |
-        kubectl apply -f k8s/invoice-api.yaml
+        docker compose -f docker-compose-infra.yml up -d
+        docker ps --format "table {{.Names}}\t{{.Status}}" | Select-String "udemy-"
 
-    - name: Check Status
+    - name: Build Application Images
+      shell: powershell
       run: |
-        kubectl get pods -l app=invoice-api
-        kubectl get service invoice-api-service
+        $images = @(
+          @{ Name = "identityserver"; Dockerfile = "Udemy.NewIdentityServer/Dockerfile" },
+          @{ Name = "gateway"; Dockerfile = "Udemy.Gateway/Dockerfile" },
+          @{ Name = "catalog-api"; Dockerfile = "Catalog/Udemy.Catalog.API/Dockerfile" },
+          @{ Name = "photostock-api"; Dockerfile = "PhotoStock/Udemy.PhotoStock.API/Dockerfile" },
+          @{ Name = "basket-api"; Dockerfile = "Basket/Udemy.Basket.API/Dockerfile" },
+          @{ Name = "discount-api"; Dockerfile = "Discount/Udemy.Discount.API/Dockerfile" },
+          @{ Name = "order-api"; Dockerfile = "Order/Udemy.Order.API/Dockerfile" },
+          @{ Name = "fakepayment-api"; Dockerfile = "FakePayment/Udemy.FakePayment.API/Dockerfile" },
+          @{ Name = "invoice-api"; Dockerfile = "Invoice/Udemy.Invoice.API/Dockerfile" },
+          @{ Name = "webui"; Dockerfile = "Udemy.WebUI/Dockerfile" }
+        )
+
+        foreach ($image in $images) {
+          Write-Host "Building $($image.Name) from $($image.Dockerfile)..." -ForegroundColor Cyan
+          docker build -t "$($image.Name):latest" -f $image.Dockerfile .
+          if ($LASTEXITCODE -ne 0) {
+            throw "Docker build failed for $($image.Name)"
+          }
+        }
+
+    - name: Apply Application Manifests
+      shell: powershell
+      run: |
+        kubectl apply -f k8s/infrastructure/redis-basket.yaml
+        if ($LASTEXITCODE -ne 0) {
+          throw "kubectl apply failed for k8s/infrastructure/redis-basket.yaml"
+        }
+
+        $manifests = @(
+          "k8s/identityserver.yaml",
+          "k8s/gateway.yaml",
+          "k8s/catalog-api.yaml",
+          "k8s/photostock-api.yaml",
+          "k8s/basket-api.yaml",
+          "k8s/discount-api.yaml",
+          "k8s/order-api.yaml",
+          "k8s/fakepayment-api.yaml",
+          "k8s/invoice-api.yaml",
+          "k8s/webui.yaml"
+        )
+
+        foreach ($manifest in $manifests) {
+          Write-Host "Applying $manifest..." -ForegroundColor Cyan
+          kubectl apply -f $manifest
+          if ($LASTEXITCODE -ne 0) {
+            throw "kubectl apply failed for $manifest"
+          }
+        }
+
+        kubectl set env deployment/webui APP_VERSION="${env:GITHUB_SHA}"
+        if ($LASTEXITCODE -ne 0) {
+          throw "kubectl set env failed for webui APP_VERSION"
+        }
+
+    - name: Restart Deployments
+      shell: powershell
+      run: |
+        $deployments = @(
+          "identityserver",
+          "gateway",
+          "catalog-api",
+          "photostock-api",
+          "basket-api",
+          "discount-api",
+          "order-api",
+          "fakepayment-api",
+          "invoice-api",
+          "webui"
+        )
+
+        foreach ($deployment in $deployments) {
+          kubectl rollout restart "deployment/$deployment"
+          if ($LASTEXITCODE -ne 0) {
+            throw "kubectl rollout restart failed for $deployment"
+          }
+        }
+
+    - name: Wait For Rollouts
+      shell: powershell
+      run: |
+        $deployments = @(
+          "identityserver",
+          "gateway",
+          "catalog-api",
+          "photostock-api",
+          "basket-api",
+          "discount-api",
+          "order-api",
+          "fakepayment-api",
+          "invoice-api",
+          "webui"
+        )
+
+        foreach ($deployment in $deployments) {
+          Write-Host "Waiting for $deployment rollout..." -ForegroundColor Yellow
+          kubectl rollout status "deployment/$deployment" --timeout=240s
+          if ($LASTEXITCODE -ne 0) {
+            throw "Rollout failed for $deployment"
+          }
+        }
+
+    - name: Post Deploy Checks
+      shell: powershell
+      run: |
+        kubectl get deploy
+        kubectl get pods -o wide
+        kubectl get svc

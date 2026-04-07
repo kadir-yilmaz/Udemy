@@ -39,7 +39,7 @@ namespace Udemy.NewIdentityServer
                     options.EmitStaticAudienceClaim = true;
 
                     // Automatic Key Management (ücretli özellik) devre dışı bırakılıyor
-                    options.KeyManagement.Enabled = true;
+                    options.KeyManagement.Enabled = false;
                 })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiResources(Config.ApiResources)
@@ -58,7 +58,8 @@ namespace Udemy.NewIdentityServer
                 })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>()
-                .AddProfileService<IdentityProfileService>();
+                .AddProfileService<IdentityProfileService>()
+                .AddDeveloperSigningCredential();
 
             return builder.Build();
         }
