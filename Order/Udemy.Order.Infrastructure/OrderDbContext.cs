@@ -1,0 +1,41 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Udemy.Order.Domain.Entities;
+
+namespace Udemy.Order.Infrastructure
+{
+    public class OrderDbContext : DbContext
+    {
+        public const string DEFAULT_SCHEMA = "ordering";
+
+        public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Domain.Entities.Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Domain.Entities.Order>().ToTable("Orders", DEFAULT_SCHEMA);
+            modelBuilder.Entity<OrderItem>().ToTable("OrderItems", DEFAULT_SCHEMA);
+            modelBuilder.Entity<Address>().ToTable("Addresses", DEFAULT_SCHEMA);
+
+            // Decimal precision ayarı
+            modelBuilder.Entity<OrderItem>().Property(x => x.Price).HasColumnType("decimal(18,2)");
+
+            // İlişki konfigürasyonları
+            modelBuilder.Entity<Domain.Entities.Order>()
+                .HasOne(o => o.Address)
+                .WithOne(a => a.Order)
+                .HasForeignKey<Address>(a => a.OrderId);
+
+            modelBuilder.Entity<Domain.Entities.Order>()
+                .HasMany(o => o.OrderItems)
+                .WithOne(oi => oi.Order)
+                .HasForeignKey(oi => oi.OrderId);
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

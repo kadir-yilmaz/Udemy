@@ -1,0 +1,520 @@
+[ 22, :, 24, :, 56, "INF" ] Starting up
+[22:24:58 Information] Duende.IdentityServer.Startup
+Starting Duende IdentityServer version 7.0.4+4fd52ed639a4a1baea222f26f82827b5b9288b3a (.NET 8.0.22)
+
+[22:24:58 Warning] Duende.IdentityServer.License
+You do not have a valid license key for the Duende software. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please start a conversation with us: https://duendesoftware.com/contact
+
+[22:24:58 Warning] Duende.IdentityServer.License
+You have automatic key management enabled, but you do not have a license. This feature requires the Business or Enterprise Edition tier of license. Alternatively you can disable automatic key management by setting the KeyManagement.Enabled property to false on the IdentityServerOptions.
+
+[22:24:58 Information] Duende.IdentityServer.Startup
+You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+
+[22:24:58 Information] Duende.IdentityServer.Startup
+Using the default authentication scheme Identity.Application for IdentityServer
+
+[22:24:58 Debug] Duende.IdentityServer.Startup
+Using Identity.Application as default ASP.NET Core scheme for authentication
+
+[22:24:58 Debug] Duende.IdentityServer.Startup
+Using Identity.External as default ASP.NET Core scheme for sign-in
+
+[22:24:58 Debug] Duende.IdentityServer.Startup
+Using Identity.External as default ASP.NET Core scheme for sign-out
+
+[22:24:58 Debug] Duende.IdentityServer.Startup
+Using Identity.Application as default ASP.NET Core scheme for challenge
+
+[22:24:58 Debug] Duende.IdentityServer.Startup
+Using Identity.Application as default ASP.NET Core scheme for forbid
+
+[22:24:58 Information] Microsoft.Hosting.Lifetime
+Now listening on: http://localhost:5001
+
+[22:24:58 Information] Microsoft.Hosting.Lifetime
+Application started. Press Ctrl+C to shut down.
+
+[22:24:58 Information] Microsoft.Hosting.Lifetime
+Hosting environment: Development
+
+[22:24:58 Information] Microsoft.Hosting.Lifetime
+Content root path: C:\Users\kadir\OneDrive\Desktop\Projeler\Udemy\Udemy.NewIdentityServer
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Login Url: /Account/Login
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Login Return Url Parameter: ReturnUrl
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Logout Url: /Account/Logout
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+ConsentUrl Url: /consent
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Consent Return Url Parameter: returnUrl
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Error Url: /home/error
+
+[22:25:52 Debug] Duende.IdentityServer.Startup
+Error Id Parameter: errorId
+
+[22:25:52 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:52 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:52 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration matched to endpoint type Discovery
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Discovery, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+
+[22:25:53 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+Start discovery request
+
+[22:25:53 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:34:00.8937022. Retires in 103.23:34:00.8937022
+
+[22:25:53 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration responded 200 in 278.9559 ms
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration/jwks matched to endpoint type Jwks
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Jwks, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+
+[22:25:53 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+Start key discovery request
+
+[22:25:53 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration/jwks responded 200 in 50.5492 ms
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /connect/token matched to endpoint type Token
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Token, successfully created handler: Duende.IdentityServer.Endpoints.TokenEndpoint
+
+[22:25:53 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.TokenEndpoint for /connect/token
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.TokenEndpoint
+Start token request.
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.ClientSecretValidator
+Start client validation
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.BasicAuthenticationSecretParser
+Start parsing Basic Authentication secret
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.ISecretsListParser
+Parser found secret: BasicAuthenticationSecretParser
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.ISecretsListParser
+Secret id found: udemy_public
+
+[22:25:53 Debug] Duende.IdentityServer.Stores.ValidatingClientStore
+client configuration validation for client udemy_public succeeded.
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.ISecretsListValidator
+Secret validator success: HashedSharedSecretValidator
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.ClientSecretValidator
+Client validation success
+
+[22:25:53 Information] Duende.IdentityServer.Events.DefaultEventService
+{"ClientId": "udemy_public", "AuthenticationMethod": "SharedSecret", "Category": "Authentication", "Name": "Client Authentication Success", "EventType": "Success", "Id": 1010, "Message": null, "ActivityId": "0HNICI0US212H:00000003", "TimeStamp": "2026-01-05T19:25:53.3099392", "ProcessId": 25904, "LocalIpAddress": "::1:5001", "RemoteIpAddress": "::1", "$type": "ClientAuthenticationSuccessEvent"}
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.TokenRequestValidator
+Start token request validation
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.TokenRequestValidator
+Start client credentials token request validation
+
+[22:25:53 Debug] Duende.IdentityServer.Validation.TokenRequestValidator
+udemy_public credentials token request validation success
+
+[22:25:53 Information] Duende.IdentityServer.Validation.TokenRequestValidator
+Token request validation success, {"ClientId": "udemy_public", "ClientName": "Udemy Public Client", "GrantType": "client_credentials", "Scopes": "basket_fullpermission catalog_fullpermission gateway_fullpermission IdentityServerApi photo_stock_fullpermission", "AuthorizationCode": "********", "RefreshToken": "********", "UserName": null, "AuthenticationContextReferenceClasses": null, "Tenant": null, "IdP": null, "Raw": {"grant_type": "client_credentials"}, "$type": "TokenRequestValidationLog"}
+
+[22:25:53 Debug] Duende.IdentityServer.Services.DefaultClaimsService
+Getting claims for access token for client: udemy_public
+
+[22:25:53 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:34:00.5701586. Retires in 103.23:34:00.5701586
+
+[22:25:53 Information] Duende.IdentityServer.Events.DefaultEventService
+{"ClientId": "udemy_public", "ClientName": "Udemy Public Client", "RedirectUri": null, "Endpoint": "Token", "SubjectId": null, "Scopes": "basket_fullpermission catalog_fullpermission gateway_fullpermission IdentityServerApi photo_stock_fullpermission", "GrantType": "client_credentials", "Tokens": [{"TokenType": "access_token", "TokenValue": "****-oOA", "$type": "Token"}], "Category": "Token", "Name": "Token Issued Success", "EventType": "Success", "Id": 2000, "Message": null, "ActivityId": "0HNICI0US212H:00000003", "TimeStamp": "2026-01-05T19:25:53.4818769", "ProcessId": 25904, "LocalIpAddress": "::1:5001", "RemoteIpAddress": "::1", "$type": "TokenIssuedSuccessEvent"}
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.TokenEndpoint
+Token request success.
+
+[22:25:53 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP POST /connect/token responded 200 in 265.6647 ms
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration matched to endpoint type Discovery
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Discovery, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+
+[22:25:53 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+Start discovery request
+
+[22:25:53 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:34:00.0933992. Retires in 103.23:34:00.0933992
+
+[22:25:53 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration responded 200 in 14.4234 ms
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration/jwks matched to endpoint type Jwks
+
+[22:25:53 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Jwks, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+
+[22:25:53 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+
+[22:25:53 Debug] Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+Start key discovery request
+
+[22:25:53 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration/jwks responded 200 in 12.1479 ms
+
+[22:25:54 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:54 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:54 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration matched to endpoint type Discovery
+
+[22:25:54 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Discovery, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+
+[22:25:54 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+
+[22:25:54 Debug] Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+Start discovery request
+
+[22:25:54 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:33:59.5191684. Retires in 103.23:33:59.5191684
+
+[22:25:54 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration responded 200 in 19.8247 ms
+
+[22:25:54 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:54 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:54 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration/jwks matched to endpoint type Jwks
+
+[22:25:54 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Jwks, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+
+[22:25:54 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+
+[22:25:54 Debug] Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+Start key discovery request
+
+[22:25:54 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration/jwks responded 200 in 12.2625 ms
+
+[22:25:55 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:55 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:55 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration matched to endpoint type Discovery
+
+[22:25:55 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Discovery, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+
+[22:25:55 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+
+[22:25:55 Debug] Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+Start discovery request
+
+[22:25:55 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:33:58.7615244. Retires in 103.23:33:58.7615244
+
+[22:25:55 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration responded 200 in 13.9035 ms
+
+[22:25:55 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:55 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:25:55 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration/jwks matched to endpoint type Jwks
+
+[22:25:55 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Jwks, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+
+[22:25:55 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+
+[22:25:55 Debug] Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+Start key discovery request
+
+[22:25:55 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration/jwks responded 200 in 14.6209 ms
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration matched to endpoint type Discovery
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Discovery, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+
+[22:26:01 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+
+[22:26:01 Debug] Duende.IdentityServer.Endpoints.DiscoveryEndpoint
+Start discovery request
+
+[22:26:01 Information] Duende.IdentityServer.Services.KeyManagement.KeyManager
+Active signing key found with kid 638D9D64A4FFC1D7F49A882F12AF04A1 for alg RS256. Expires in 89.23:33:52.1770217. Retires in 103.23:33:52.1770217
+
+[22:26:01 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration responded 200 in 11.2888 ms
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /.well-known/openid-configuration/jwks matched to endpoint type Jwks
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Jwks, successfully created handler: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+
+[22:26:01 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+
+[22:26:01 Debug] Duende.IdentityServer.Endpoints.DiscoveryKeyEndpoint
+Start key discovery request
+
+[22:26:01 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP GET /.well-known/openid-configuration/jwks responded 200 in 8.9147 ms
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Request path /connect/token matched to endpoint type Token
+
+[22:26:01 Debug] Duende.IdentityServer.Hosting.EndpointRouter
+Endpoint enabled: Token, successfully created handler: Duende.IdentityServer.Endpoints.TokenEndpoint
+
+[22:26:01 Information] Duende.IdentityServer.Hosting.IdentityServerMiddleware
+Invoking IdentityServer endpoint: Duende.IdentityServer.Endpoints.TokenEndpoint for /connect/token
+
+[22:26:01 Debug] Duende.IdentityServer.Endpoints.TokenEndpoint
+Start token request.
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.ClientSecretValidator
+Start client validation
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.BasicAuthenticationSecretParser
+Start parsing Basic Authentication secret
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.ISecretsListParser
+Parser found secret: BasicAuthenticationSecretParser
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.ISecretsListParser
+Secret id found: udemy_user
+
+[22:26:01 Debug] Duende.IdentityServer.Stores.ValidatingClientStore
+client configuration validation for client udemy_user succeeded.
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.ISecretsListValidator
+Secret validator success: HashedSharedSecretValidator
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.ClientSecretValidator
+Client validation success
+
+[22:26:01 Information] Duende.IdentityServer.Events.DefaultEventService
+{"ClientId": "udemy_user", "AuthenticationMethod": "SharedSecret", "Category": "Authentication", "Name": "Client Authentication Success", "EventType": "Success", "Id": 1010, "Message": null, "ActivityId": "0HNICI0US212L:00000003", "TimeStamp": "2026-01-05T19:26:01.8796176", "ProcessId": 25904, "LocalIpAddress": "::1:5001", "RemoteIpAddress": "::1", "$type": "ClientAuthenticationSuccessEvent"}
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.TokenRequestValidator
+Start token request validation
+
+[22:26:01 Debug] Duende.IdentityServer.Validation.TokenRequestValidator
+Start resource owner password token request validation
+
+[22:26:02 Information] Duende.IdentityServer.Validation.TokenRequestValidator
+User authentication failed:  invalid_username_or_password, details: {"ClientId": "udemy_user", "ClientName": "Udemy User Client", "GrantType": "password", "Scopes": "basket_fullpermission catalog_fullpermission email gateway_fullpermission IdentityServerApi offline_access openid order_fullpermission photo_stock_fullpermission profile roles", "AuthorizationCode": "********", "RefreshToken": "********", "UserName": "kadiryilmaz.dev@gmail.com", "AuthenticationContextReferenceClasses": null, "Tenant": null, "IdP": null, "Raw": {"grant_type": "password", "username": "kadiryilmaz.dev@gmail.com", "password": "***REDACTED***", "scope": "openid profile email offline_access basket_fullpermission order_fullpermission gateway_fullpermission catalog_fullpermission photo_stock_fullpermission IdentityServerApi roles"}, "$type": "TokenRequestValidationLog"}
+
+[22:26:02 Information] Duende.IdentityServer.Events.DefaultEventService
+{"Username": "kadiryilmaz.dev@gmail.com", "Endpoint": "Token", "ClientId": "udemy_user", "Category": "Authentication", "Name": "User Login Failure", "EventType": "Failure", "Id": 1001, "Message": "invalid_username_or_password", "ActivityId": "0HNICI0US212L:00000003", "TimeStamp": "2026-01-05T19:26:02.5149241", "ProcessId": 25904, "LocalIpAddress": "::1:5001", "RemoteIpAddress": "::1", "$type": "UserLoginFailureEvent"}
+
+[22:26:02 Information] Duende.IdentityServer.Events.DefaultEventService
+{"ClientId": "udemy_user", "ClientName": "Udemy User Client", "RedirectUri": null, "Endpoint": "Token", "SubjectId": null, "Scopes": "basket_fullpermission catalog_fullpermission email gateway_fullpermission IdentityServerApi offline_access openid order_fullpermission photo_stock_fullpermission profile roles", "GrantType": "password", "Error": "invalid_grant", "ErrorDescription": "invalid_username_or_password", "Category": "Token", "Name": "Token Issued Failure", "EventType": "Failure", "Id": 2001, "Message": null, "ActivityId": "0HNICI0US212L:00000003", "TimeStamp": "2026-01-05T19:26:02.5253900", "ProcessId": 25904, "LocalIpAddress": "::1:5001", "RemoteIpAddress": "::1", "$type": "TokenIssuedFailureEvent"}
+
+[22:26:02 Information] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP POST /connect/token responded 400 in 684.5285 ms
+
+[22:26:11 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:11 Debug] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
+AuthenticationScheme: Identity.Application was not authenticated.
+
+[22:26:11 Debug] Duende.IdentityServer.Hosting.LocalApiAuthentication.LocalApiAuthenticationHandler
+AuthenticationScheme: IdentityServerAccessToken was not authenticated.
+
+[22:26:11 Error] Microsoft.EntityFrameworkCore.Database.Command
+Failed executing DbCommand (4ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = Int32), @p2='?', @p3='?' (Size = 36), @p4='?' (Size = 25), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 5), @p9='?' (Size = 25), @p10='?' (Size = 25), @p11='?' (Size = 84), @p12='?', @p13='?' (DbType = Boolean), @p14='?' (Size = 32), @p15='?' (Size = 6), @p16='?' (DbType = Boolean), @p17='?' (Size = 25)], CommandType='Text', CommandTimeout='30']
+INSERT INTO "AspNetUsers" ("Id", "AccessFailedCount", "City", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+
+[22:26:11 Error] Microsoft.EntityFrameworkCore.Update
+An exception occurred in the database while saving changes for context type 'Udemy.NewIdentityServer.Data.ApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: AspNetUsers.City'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: AspNetUsers.City'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+
+[22:26:11 Error] Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware
+An unhandled exception has occurred while executing the request.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: AspNetUsers.City'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.CreateAsync(TUser user, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.CreateAsync(TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.CreateAsync(TUser user, String password)
+   at Udemy.NewIdentityServer.Controllers.UsersController.SignUp(SignupDto signupDto) in C:\Users\kadir\OneDrive\Desktop\Projeler\Udemy\Udemy.NewIdentityServer\Controllers\UsersController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Duende.IdentityServer.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IdentityServerOptions options, IEndpointRouter router, IUserSession userSession, IEventService events, IIssuerNameService issuerNameService, ISessionCoordinationService sessionCoordinationService) in /_/src/IdentityServer/Hosting/IdentityServerMiddleware.cs:line 131
+   at Duende.IdentityServer.Hosting.MutualTlsEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes) in /_/src/IdentityServer/Hosting/MutualTlsEndpointMiddleware.cs:line 95
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Duende.IdentityServer.Hosting.DynamicProviders.DynamicSchemeAuthenticationMiddleware.Invoke(HttpContext context) in /_/src/IdentityServer/Hosting/DynamicProviders/DynamicSchemes/DynamicSchemeAuthenticationMiddleware.cs:line 51
+   at Duende.IdentityServer.Hosting.BaseUrlMiddleware.Invoke(HttpContext context) in /_/src/IdentityServer/Hosting/BaseUrlMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+[22:26:11 Error] Serilog.AspNetCore.RequestLoggingMiddleware
+HTTP POST /api/Users/SignUp responded 500 in 391.0784 ms

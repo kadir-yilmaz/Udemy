@@ -1,0 +1,297 @@
+name: udemy
+
+services:
+  # --- Infrastructure ---
+  udemy-mongodb:
+    image: mongo:latest
+    container_name: udemy-catalog-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - udemy-catalog-mongodb-data:/data/db
+    networks:
+      - udemy-network
+
+  udemy-basket-redis:
+    image: redis:7
+    container_name: udemy-basket-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - udemy-basket-redis-data:/data
+    networks:
+      - udemy-network
+
+  udemy-discount-postgres:
+    image: postgres:15
+    container_name: udemy-discount-postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Password12*
+      POSTGRES_DB: discountdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - udemy-discount-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d discountdb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - udemy-network
+
+  udemy-order-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: udemy-order-sqlserver
+    environment:
+      SA_PASSWORD: Password12*
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+    ports:
+      - "1444:1433"
+    volumes:
+      - udemy-order-sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"Password12*\" -C -Q \"SELECT 1\" || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - udemy-network
+
+  udemy-identity-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: udemy-identity-sqlserver
+    environment:
+      SA_PASSWORD: Password12*
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+    ports:
+      - "1445:1433"
+    volumes:
+      - udemy-identity-sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"Password12*\" -C -Q \"SELECT 1\" || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - udemy-network
+
+  udemy-rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: udemy-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15674:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - udemy-rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - udemy-network
+
+  # --- Microservices ---
+  identityserver:
+    build:
+      context: .
+      dockerfile: Udemy.NewIdentityServer/Dockerfile
+    container_name: identityserver
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=udemy-identity-sqlserver;Database=IdentityDb;User=sa;Password=Password12*;TrustServerCertificate=True
+    depends_on:
+      udemy-identity-sqlserver:
+        condition: service_healthy
+    networks:
+      - udemy-network
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Udemy.Gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - IdentityServerURL=http://identityserver:8080
+    networks:
+      - udemy-network
+
+  catalog-api:
+    build:
+      context: .
+      dockerfile: Catalog/Udemy.Catalog.API/Dockerfile
+    container_name: catalog-api
+    ports:
+      - "5011:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - DatabaseOptions__ConnectionString=mongodb://udemy-mongodb:27017
+      - IdentityServerURL=http://identityserver:8080
+      - RabbitMQUrl=udemy-rabbitmq
+    depends_on:
+      - udemy-mongodb
+      - udemy-rabbitmq
+      - identityserver
+    networks:
+      - udemy-network
+
+  photostock-api:
+    build:
+      context: .
+      dockerfile: PhotoStock/Udemy.PhotoStock.API/Dockerfile
+    container_name: photostock-api
+    ports:
+      - "5012:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - IdentityServerURL=http://identityserver:8080
+    depends_on:
+      - identityserver
+    networks:
+      - udemy-network
+
+  basket-api:
+    build:
+      context: .
+      dockerfile: Basket/Udemy.Basket.API/Dockerfile
+    container_name: basket-api
+    ports:
+      - "5013:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - IdentityServerURL=http://identityserver:8080
+      - RedisSettings__Host=udemy-basket-redis
+      - RedisSettings__Port=6379
+    depends_on:
+      - udemy-basket-redis
+      - identityserver
+    networks:
+      - udemy-network
+
+  discount-api:
+    build:
+      context: .
+      dockerfile: Discount/Udemy.Discount.API/Dockerfile
+    container_name: discount-api
+    ports:
+      - "5014:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__PostgreSQL=Host=udemy-discount-postgres;Port=5432;Database=discountdb;Username=admin;Password=Password12*
+      - IdentityServerURL=http://identityserver:8080
+    depends_on:
+      udemy-discount-postgres:
+        condition: service_healthy
+      identityserver:
+        condition: service_started
+    networks:
+      - udemy-network
+
+  order-api:
+    build:
+      context: .
+      dockerfile: Order/Udemy.Order.API/Dockerfile
+    container_name: order-api
+    ports:
+      - "5015:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=udemy-order-sqlserver;Database=OrderDb;User=sa;Password=Password12*;TrustServerCertificate=True
+      - IdentityServerURL=http://identityserver:8080
+      - RabbitMQUrl=udemy-rabbitmq
+    depends_on:
+      udemy-order-sqlserver:
+        condition: service_healthy
+      udemy-rabbitmq:
+        condition: service_healthy
+      identityserver:
+        condition: service_started
+    networks:
+      - udemy-network
+
+  fakepayment-api:
+    build:
+      context: .
+      dockerfile: FakePayment/Udemy.FakePayment.API/Dockerfile
+    container_name: fakepayment-api
+    ports:
+      - "5016:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - IdentityServerURL=http://identityserver:8080
+      - RabbitMQUrl=udemy-rabbitmq
+    depends_on:
+      - identityserver
+      - udemy-rabbitmq
+    networks:
+      - udemy-network
+
+  invoice-api:
+    build:
+      context: .
+      dockerfile: Invoice/Udemy.Invoice.API/Dockerfile
+    container_name: invoice-api
+    ports:
+      - "5017:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - RabbitMQUrl=udemy-rabbitmq
+    depends_on:
+      - udemy-rabbitmq
+    networks:
+      - udemy-network
+
+  webui:
+    build:
+      context: .
+      dockerfile: Udemy.WebUI/Dockerfile
+    container_name: webui
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ServiceApiSettings__IdentityBaseUri=http://identityserver:8080
+      - ServiceApiSettings__GatewayBaseUri=http://gateway:8080
+      - ServiceApiSettings__PhotoStockUri=http://photostock-api:8080
+    ports:
+      - "5075:8080"
+    depends_on:
+      - identityserver
+      - gateway
+    networks:
+      - udemy-network
+
+volumes:
+  udemy-catalog-mongodb-data:
+  udemy-basket-redis-data:
+  udemy-discount-postgres-data:
+  udemy-order-sqlserver-data:
+  udemy-identity-sqlserver-data:
+  udemy-rabbitmq-data:
+
+networks:
+  udemy-network:
+    name: udemy-network
+    driver: bridge

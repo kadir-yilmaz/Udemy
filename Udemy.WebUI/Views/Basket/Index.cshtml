@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "Sepetim";
+}
+
+@model BasketViewModel
+
+<div class="row mb-5">
+    
+    @if (Model != null && Model.BasketItems.Any())
+    {
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body p-4">
+                    <h4 class="card-title fw-bold mb-4">Sepetinizde @Model.BasketItems.Count adet ürün var</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="w-50">Kurs Detayları</th>
+                                    <th scope="col" class="text-end">Fiyat</th>
+                                    <th scope="col" class="text-end">İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.BasketItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0 fw-semibold">@item.CourseName</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="fs-5 fw-bold text-primary">@item.GetCurrentPrice TL</span>
+                                            @if (item.HasDiscountApplied)
+                                            {
+                                                <div class="small text-success text-nowrap">
+                                                    <i class="bi bi-tag-fill"></i> %@Model.DiscountRate!.Value İndirim
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="btn btn-outline-danger btn-sm rounded-circle" asp-controller="Basket" asp-action="RemoveBasketItem" asp-route-courseId="@item.CourseId" title="Sil">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-none d-md-block mt-3">
+                <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-arrow-left"></i> Alışverişe Devam Et
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-3">Sipariş Özeti</h5>
+                    
+                    <div class="d-flex justify-content-between mb-2 text-muted">
+                        <span>Ara Toplam</span>
+                        <span>@Model.TotalPrice TL</span> <!-- Assuming TotalPrice is final, logic might need adjustment if separate subtotal exists, sticking to View logic -->
+                    </div>
+
+                    @if (Model.HasDiscount)
+                    {
+                        <div class="d-flex justify-content-between mb-2 text-success">
+                            <span>İndirim (@Model.DiscountCode)</span>
+                            <span>- %@Model.DiscountRate!.Value</span>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Toplam</span>
+                            <span class="fw-bold fs-5 text-primary">@Model.TotalPrice TL</span>
+                        </div>
+                         
+                        <div class="alert alert-success d-flex justify-content-between align-items-center p-2 mb-3 small">
+                            <span><i class="bi bi-check-circle-fill me-1"></i> Kod uygulandı: <strong>@Model.DiscountCode</strong></span>
+                            <a asp-controller="Basket" asp-action="CancelApplyDiscount" class="text-danger text-decoration-none fw-bold"><i class="bi bi-x"></i></a>
+                        </div>
+                    }
+                    else
+                    {
+                         <hr />
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Toplam</span>
+                            <span class="fw-bold fs-5 text-primary">@Model.TotalPrice TL</span>
+                        </div>
+
+                        <form asp-controller="Basket" asp-action="ApplyDiscount" class="mb-4">
+                            <label class="form-label small text-muted">İndirim Kodu</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="DiscountApplyInput.Code" placeholder="Kod giriniz">
+                                <button class="btn btn-dark" type="submit">Uygula</button>
+                            </div>
+                             @if (TempData["discountStatus"] != null && (bool)TempData["discountStatus"]! == false)
+                            {
+                                <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle"></i> Geçersiz kod</div>
+                            }
+                            @if (TempData["discountError"] != null)
+                            {
+                                <div class="text-danger small mt-1">@TempData["discountError"]</div>
+                            }
+                        </form>
+                    }
+
+                    <a class="btn btn-primary w-100 py-2 fw-bold" asp-controller="Order" asp-action="Checkout">
+                        Ödemeyi Tamamla <i class="bi bi-chevron-right"></i>
+                    </a>
+                    
+                    <div class="d-md-none mt-3 text-center">
+                        <a class="text-muted text-decoration-none small" asp-controller="Home" asp-action="Index">
+                             Alışverişe Devam Et
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 py-5 text-center">
+            <div class="mb-4">
+                <i class="bi bi-cart-x display-1 text-muted"></i>
+            </div>
+            <h3 class="fw-bold">Sepetiniz Boş</h3>
+            <p class="text-muted">Sepetinizde henüz bir kurs bulunmamaktadır.</p>
+            <a class="btn btn-primary px-4 py-2 mt-2" asp-controller="Home" asp-action="Index">
+                Kursları İncele
+            </a>
+        </div>
+    }
+</div>

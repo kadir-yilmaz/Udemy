@@ -1,0 +1,139 @@
+@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = "_Layout";
+}
+@model Udemy.WebUI.Models.SigninInput
+
+<style>
+    .auth-container {
+        max-width: 400px;
+        margin: 2rem auto;
+    }
+    .auth-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .auth-header h2 {
+        font-weight: 700;
+        color: #1c1d1f;
+        font-size: 1.5rem;
+    }
+    .auth-form {
+        background: #fff;
+        border: 1px solid #d1d7dc;
+        padding: 2rem;
+    }
+    .auth-form .form-label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #1c1d1f;
+    }
+    .auth-form .form-control {
+        border: 1px solid #1c1d1f;
+        border-radius: 0;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    .auth-form .form-control:focus {
+        border-color: #5624d0;
+        box-shadow: 0 0 0 1px #5624d0;
+    }
+    .btn-auth {
+        width: 100%;
+        background-color: #a435f0;
+        color: #fff;
+        border: none;
+        padding: 0.85rem;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+    .btn-auth:hover {
+        background-color: #8710d8;
+        color: #fff;
+    }
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+        color: #6a6f73;
+        font-size: 0.85rem;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #d1d7dc;
+    }
+    .auth-divider span {
+        padding: 0 1rem;
+    }
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #d1d7dc;
+    }
+    .auth-footer a {
+        color: #5624d0;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    .auth-footer a:hover {
+        color: #401b9c;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Hesabınıza Giriş Yapın</h2>
+        </div>
+
+        <div class="auth-form">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success mb-3">
+                    <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+                </div>
+            }
+            
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="alert alert-danger mb-3 py-2">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <div asp-validation-summary="ModelOnly" class="m-0 p-0 text-start"></div>
+                    </div>
+                </div>
+            }
+
+            <form asp-controller="Auth" asp-action="SignIn" method="post">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input type="email" asp-for="Email" class="form-control" placeholder="ornek@email.com">
+                    <span class="text-danger small" asp-validation-for="Email"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Şifre</label>
+                    <input type="password" asp-for="Password" class="form-control" placeholder="••••••••">
+                    <span class="text-danger small" asp-validation-for="Password"></span>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" asp-for="IsRemember" class="form-check-input" id="rememberMe">
+                    <label asp-for="IsRemember" class="form-check-label" for="rememberMe">Beni hatırla</label>
+                </div>
+                
+                <button type="submit" class="btn btn-auth">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Giriş Yap
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Hesabınız yok mu? <a asp-action="SignUp">Kaydolun</a>
+            </div>
+        </div>
+    </div>
+</div>

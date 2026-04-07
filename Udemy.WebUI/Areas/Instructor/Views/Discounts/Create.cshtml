@@ -1,0 +1,107 @@
+@using Udemy.WebUI.Models.Discounts
+@{
+    ViewData["Title"] = "Yeni Kupon Oluştur";
+}
+
+@model DiscountCreateInput
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-tags me-2"></i>Yeni İndirim Kuponu</h5>
+            </div>
+            <div class="card-body">
+                <form asp-area="Instructor" asp-controller="Discounts" asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label">Kupon Kodu <span class="text-danger">*</span></label>
+                        <input asp-for="Code" class="form-control" placeholder="Örn: YILBASI25" />
+                        <span asp-validation-for="Code" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Rate" class="form-label">İndirim Oranı (%) <span class="text-danger">*</span></label>
+                        <select asp-for="Rate" class="form-select">
+                            <option value="5">%5</option>
+                            <option value="10">%10</option>
+                            <option value="15">%15</option>
+                            <option value="20">%20</option>
+                            <option value="25">%25</option>
+                            <option value="30">%30</option>
+                            <option value="35">%35</option>
+                            <option value="40">%40</option>
+                            <option value="45">%45</option>
+                            <option value="50">%50</option>
+                            <option value="55">%55</option>
+                            <option value="60">%60</option>
+                            <option value="65">%65</option>
+                            <option value="70">%70</option>
+                            <option value="75">%75</option>
+                            <option value="80">%80</option>
+                            <option value="85">%85</option>
+                            <option value="90">%90</option>
+                            <option value="95">%95</option>
+                            <option value="100">%100</option>
+                        </select>
+                        <span asp-validation-for="Rate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ExpirationDate" class="form-label">Son Kullanma Tarihi <span class="text-danger">*</span></label>
+                        <input asp-for="ExpirationDate" type="date" class="form-control" 
+                               value="@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="ExpirationDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Geçerli Kurslar <span class="text-danger">*</span></label>
+                        <div class="mb-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="selectAllCourses">
+                                <i class="bi bi-check-all"></i> Tümünü Seç
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="deselectAllCourses">
+                                <i class="bi bi-x-lg"></i> Temizle
+                            </button>
+                        </div>
+                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var course in (Microsoft.AspNetCore.Mvc.Rendering.MultiSelectList)ViewBag.Courses)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input course-checkbox" type="checkbox" 
+                                           name="AllowedCourseIds" value="@course.Value" id="course_@course.Value">
+                                    <label class="form-check-label" for="course_@course.Value">
+                                        @course.Text
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="AllowedCourseIds" class="text-danger small d-block"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="UserId" />
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Oluştur
+                        </button>
+                        <a asp-area="Instructor" asp-controller="Discounts" asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('selectAllCourses').addEventListener('click', function() {
+            document.querySelectorAll('.course-checkbox').forEach(cb => cb.checked = true);
+        });
+        
+        document.getElementById('deselectAllCourses').addEventListener('click', function() {
+            document.querySelectorAll('.course-checkbox').forEach(cb => cb.checked = false);
+        });
+    </script>
+}

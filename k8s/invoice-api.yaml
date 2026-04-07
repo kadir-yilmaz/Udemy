@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-api
+  labels:
+    app: invoice-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice-api
+  template:
+    metadata:
+      labels:
+        app: invoice-api
+    spec:
+      containers:
+      - name: invoice-api
+        image: invoice-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+        - name: ASPNETCORE_URLS
+          value: "http://+:8080"
+        - name: RabbitMQUrl
+          value: "host.docker.internal"
+        - name: EmailSettings__SmtpUsername
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: SMTP_USERNAME
+        - name: EmailSettings__SmtpPassword
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: SMTP_PASSWORD
+        - name: EmailSettings__FromEmail
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: SMTP_USERNAME
+        - name: Iyzipay__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: IYZIPAY_API_KEY
+        - name: Iyzipay__SecretKey
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: IYZIPAY_SECRET_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: invoice-api-service
+spec:
+  type: NodePort
+  selector:
+    app: invoice-api
+  ports:
+    - protocol: TCP
+      port: 5017
+      targetPort: 8080
+      nodePort: 30017 # Access via localhost:30017

@@ -1,0 +1,166 @@
+using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
+
+namespace Udemy.NewIdentityServer
+{
+    public static class Config
+    {
+        // API kaynakları (her mikroservis için bir resource)
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("resource_catalog")
+                {
+                    Scopes = { "catalog_fullpermission" }
+                },
+
+                new ApiResource("resource_photo_stock")
+                {
+                    Scopes = { "photo_stock_fullpermission" }
+                },
+
+                new ApiResource("resource_basket")
+                {
+                    Scopes = { "basket_fullpermission" }
+                },
+
+                new ApiResource("resource_discount")
+                {
+                    Scopes = { "discount_fullpermission" }
+                },
+
+                new ApiResource("resource_order")
+                {
+                    Scopes = { "order_fullpermission" }
+                },
+
+                new ApiResource("resource_payment")
+                {
+                    Scopes = { "payment_fullpermission" }
+                },
+
+                new ApiResource("resource_gateway")
+                {
+                    Scopes = { "gateway_fullpermission" }
+                },
+
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
+                {
+                    Scopes = { IdentityServerConstants.LocalApi.ScopeName }
+                }
+            };
+
+        // Kullanıcı claim kaynakları
+        public static IEnumerable<IdentityResource> IdentityResources =>
+            new IdentityResource[]
+            {
+                new IdentityResources.Email(),
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+
+                new IdentityResource
+                {
+                    Name = "roles",
+                    DisplayName = "Roles",
+                    Description = "Kullanıcı rolleri",
+                    UserClaims = new[] { "role" }
+                }
+            };
+
+        // API izinleri (scope)
+        public static IEnumerable<ApiScope> ApiScopes =>
+            new ApiScope[]
+            {
+                new ApiScope("catalog_fullpermission", "Catalog API için full erişim"),
+                new ApiScope("photo_stock_fullpermission", "Photo Stock API için full erişim"),
+                new ApiScope("basket_fullpermission", "Basket API için full erişim"),
+                new ApiScope("discount_fullpermission", "Discount API için full erişim"),
+                new ApiScope("order_fullpermission", "Order API için full erişim"),
+                new ApiScope("payment_fullpermission", "Payment API için full erişim"),
+                new ApiScope("gateway_fullpermission", "Gateway API için full erişim"),
+                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
+            };
+
+        // Token alan client uygulamalar
+        public static IEnumerable<Client> Clients =>
+            new Client[]
+            {
+                // Public client (Giriş yapmadan erişim - Catalog, PhotoStock)
+                new Client
+                {
+                    ClientName = "Udemy Public Client",
+                    ClientId = "udemy_public",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes =
+                    {
+                        "catalog_fullpermission",
+                        "photo_stock_fullpermission",
+                        "gateway_fullpermission",
+                        "basket_fullpermission",
+                        IdentityServerConstants.LocalApi.ScopeName
+                    }
+                },
+
+                // User client (Giriş yapmış kullanıcılar - Basket, Order, vb.)
+                new Client
+                {
+                    ClientName = "Udemy User Client",
+                    ClientId = "udemy_user",
+                    AllowOfflineAccess = true,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    AllowedScopes =
+                    {
+                        "basket_fullpermission",
+                        "order_fullpermission",
+                        "gateway_fullpermission",
+                        "catalog_fullpermission",
+                        "photo_stock_fullpermission",
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        IdentityServerConstants.LocalApi.ScopeName,
+                        "roles"
+                    },
+
+                    AccessTokenLifetime = 3600, // 1 saat
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,
+                    RefreshTokenUsage = TokenUsage.ReUse
+                },
+
+                // WebMvcClientForUser (Postman tarafında kullanılan ID)
+                new Client
+                {
+                    ClientName = "Web MVC User Client",
+                    ClientId = "WebMvcClientForUser",
+                    AllowOfflineAccess = true,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    AllowedScopes =
+                    {
+                        "basket_fullpermission",
+                        "order_fullpermission",
+                        "gateway_fullpermission",
+                        "catalog_fullpermission",
+                        "photo_stock_fullpermission",
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        IdentityServerConstants.LocalApi.ScopeName,
+                        "roles"
+                    },
+
+                    AccessTokenLifetime = 3600,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,
+                    RefreshTokenUsage = TokenUsage.ReUse
+                }
+            };
+    }
+}

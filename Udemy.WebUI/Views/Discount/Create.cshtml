@@ -1,0 +1,54 @@
+@using Udemy.WebUI.Models.Discounts
+@{
+    ViewData["Title"] = "Yeni Kupon Oluştur";
+}
+
+@model DiscountCreateInput
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Yeni İndirim Kuponu Oluştur</h4>
+                <hr />
+                
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label"></label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Rate" class="form-label"></label>
+                        <input asp-for="Rate" class="form-control" type="number" min="1" max="100" />
+                        <span asp-validation-for="Rate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ExpirationDate" class="form-label"></label>
+                        <input asp-for="ExpirationDate" type="date" class="form-control" 
+                               value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AllowedCourseIds" class="form-label"></label>
+                        <select asp-for="AllowedCourseIds" asp-items="ViewBag.Courses" class="form-select" multiple style="height: 150px;"></select>
+                        <div class="form-text">Birden fazla kurs seçmek için CTRL tuşuna basılı tutun.</div>
+                        <span asp-validation-for="AllowedCourseIds" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="UserId" />
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Oluştur</button>
+                        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

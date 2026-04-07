@@ -1,0 +1,6 @@
+@Udemy.FakePayment.API_HostAddress = http://localhost:5249
+
+GET {{Udemy.FakePayment.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,28 @@
+name: Local K8s Deploy
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  deploy:
+    name: Deploy to Local Kubernetes
+    runs-on: self-hosted  # <--- Crucial: Runs on your local machine runner
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Build Docker Image
+      run: |
+        docker build -t invoice-api:latest -f Invoice/Udemy.Invoice.API/Dockerfile .
+
+    - name: Apply Kubernetes Manifests
+      run: |
+        kubectl apply -f k8s/invoice-api.yaml
+
+    - name: Check Status
+      run: |
+        kubectl get pods -l app=invoice-api
+        kubectl get service invoice-api-service

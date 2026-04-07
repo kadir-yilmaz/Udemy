@@ -1,0 +1,8 @@
+Build started...
+Build succeeded.
+The Entity Framework tools version '8.0.0' is older than that of the runtime '9.0.9'. Update the tools for the latest features and bug fixes. See https://aka.ms/AAc1fbw for more information.
+[23:32:11 INF] Starting up
+[23:32:12 Information] 
+Shut down complete
+
+Unable to create a 'DbContext' of type 'PersistedGrantDbContext'. The exception 'Method 'get_LockReleaseBehavior' in type 'Microsoft.EntityFrameworkCore.Sqlite.Migrations.Internal.SqliteHistoryRepository' from assembly 'Microsoft.EntityFrameworkCore.Sqlite, Version=8.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' does not have an implementation.' was thrown while attempting to create an instance. For the different patterns supported at design time, see https://go.microsoft.com/fwlink/?linkid=851728

@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Ödeme Geçmişim";
+}
+@model List<OrderViewModel>
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white p-4 border-bottom-0">
+                 <h4 class="card-title fw-bold m-0"><i class="bi bi-clock-history text-primary me-2"></i>Ödeme Geçmişim</h4>
+            </div>
+            <div class="card-body p-4 pt-0">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="accordion" id="orderHistoryAccordion">
+                        @foreach (var item in Model)
+                        {
+                            var collapseId = "collapse-" + item.Id;
+                            var headerId = "heading-" + item.Id;
+                            // Calculate total for header display if possible, simplistic approach
+                            decimal orderTotal = item.OrderItems.Sum(x => x.Price);
+
+                            <div class="accordion-item border-0 mb-3 shadow-sm rounded overflow-hidden">
+                                <h2 class="accordion-header" id="@headerId">
+                                    <button class="accordion-button collapsed bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                        <div class="d-flex w-100 justify-content-between align-items-center me-3">
+                                            <div>
+                                                <span class="fw-bold text-dark">Sipariş #@item.Id</span>
+                                                <div class="small text-muted mt-1">
+                                                    <i class="bi bi-calendar-event me-1"></i> @item.CreatedDate.ToShortDateString()
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge bg-light text-dark border p-2">
+                                                    @item.OrderItems.Count Kurs
+                                                </span>
+                                                <div class="fw-bold text-primary mt-1">
+                                                     @orderTotal TL
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headerId" data-bs-parent="#orderHistoryAccordion">
+                                    <div class="accordion-body bg-light p-4">
+                                        <h6 class="fw-bold mb-3 small text-uppercase text-muted">Sipariş Detayları</h6>
+                                        <ul class="list-group list-group-flush rounded shadow-sm">
+                                             @foreach (var orderItem in item.OrderItems)
+                                            {
+                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-play-circle-fill text-secondary me-3 fs-5"></i>
+                                                        <span class="fw-semibold">@orderItem.ProductName</span>
+                                                    </div>
+                                                    <span class="fw-bold">@orderItem.Price TL</span>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                     <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="bi bi-bag-x display-1 text-muted"></i>
+                        </div>
+                        <h4 class="fw-bold">Sipariş Geçmişi Bulunamadı</h4>
+                        <p class="text-muted">Henüz herhangi bir kurs satın almadınız.</p>
+                        <a class="btn btn-primary px-4 py-2 mt-2" asp-controller="Home" asp-action="Index">
+                            Kursları İncele
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

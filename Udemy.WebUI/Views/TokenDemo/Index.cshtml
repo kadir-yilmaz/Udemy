@@ -1,0 +1,626 @@
+@using Udemy.WebUI.Controllers
+@model TokenDemoViewModel
+@{
+    ViewData["Title"] = "Token Demo - OAuth 2.0 / IdentityServer4";
+}
+
+<style>
+    /* Dark Mode for Token Demo */
+    body {
+        background: linear-gradient(180deg, #0d1117 0%, #161b22 100%) !important;
+        color: #c9d1d9 !important;
+        min-height: 100vh;
+    }
+    .container { color: #c9d1d9; }
+    h2, h3, h4, h5, h6 { color: #58a6ff; }
+    .text-muted { color: #8b949e !important; }
+    code { background: #21262d; color: #f0883e; padding: 2px 6px; border-radius: 4px; }
+    
+    .token-card {
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        background: #161b22;
+        border: 1px solid #30363d;
+    }
+    .token-header {
+        font-weight: 700;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+    .token-body {
+        padding: 1.5rem;
+        background: #0d1117;
+        border-radius: 0 0 12px 12px;
+    }
+    .token-raw {
+        font-family: 'Consolas', monospace;
+        font-size: 0.75rem;
+        word-break: break-all;
+        background: #1e1e1e;
+        color: #9cdcfe;
+        padding: 1rem;
+        border-radius: 6px;
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #30363d;
+    }
+    .claim-table {
+        font-size: 0.85rem;
+        color: #c9d1d9;
+        --bs-table-bg: transparent;
+        --bs-table-striped-bg: rgba(255,255,255,0.03);
+    }
+    .claim-table td, .claim-table th {
+        padding: 0.5rem 0.75rem;
+        border-color: #30363d !important;
+        background: transparent !important;
+        color: #c9d1d9 !important;
+    }
+    .claim-table tr:nth-child(even) td {
+        background: rgba(255,255,255,0.02) !important;
+    }
+    .claim-table thead th {
+        background: rgba(255,255,255,0.05) !important;
+        color: #8b949e !important;
+        font-weight: 600;
+        border-bottom: 2px solid #30363d !important;
+    }
+    .claim-type {
+        color: #8b949e;
+        font-family: monospace;
+    }
+    /* Dark mode for all tables */
+    .table, .table-striped, .table-bordered {
+        --bs-table-bg: transparent;
+        --bs-table-striped-bg: rgba(255,255,255,0.03);
+        --bs-table-border-color: #30363d;
+        color: #c9d1d9 !important;
+    }
+    .table td, .table th {
+        background: transparent !important;
+        color: #c9d1d9 !important;
+        border-color: #30363d !important;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+        background: rgba(255,255,255,0.02) !important;
+        color: #c9d1d9 !important;
+    }
+    .table-dark, .table thead.table-dark th {
+        background: #21262d !important;
+        color: #c9d1d9 !important;
+    }
+    .card-body {
+        background: #0d1117;
+        color: #c9d1d9;
+    }
+    .badge-expire-ok { background: #238636; }
+    .badge-expire-warn { background: #d29922; color: #000; }
+    .badge-expire-danger { background: #f85149; }
+    .info-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        font-size: 0.7rem;
+        cursor: help;
+    }
+    
+    /* Copy Buttons - visible in dark mode */
+    .btn-copy {
+        background: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+    }
+    .btn-copy:hover {
+        background: #30363d;
+        color: #fff;
+    }
+    .btn-jwtio {
+        background: #f59e0b;
+        border: none;
+        color: #000;
+    }
+    .btn-jwtio:hover {
+        background: #d97706;
+        color: #000;
+    }
+    
+    /* Cards */
+    .card { background: #161b22; border-color: #30363d; color: #c9d1d9; }
+    .card-header { background: #21262d; border-color: #30363d; }
+    .table { color: #c9d1d9; }
+    .table-striped > tbody > tr:nth-of-type(odd) > * { background: #161b22; }
+    .table td, .table th { border-color: #30363d; }
+    
+    /* Alerts */
+    .alert-success { background: #238636; border-color: #2ea043; color: #fff; }
+    .alert-warning { background: #9e6a03; border-color: #d29922; color: #fff; }
+    .alert-danger { background: #f85149; border-color: #f85149; color: #fff; }
+    
+    /* Flow chart */
+    .flow-card { background: #21262d !important; border: 1px solid #30363d; }
+</style>
+
+<div class="container py-4">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-0"><i class="bi bi-shield-lock text-primary"></i> Token Demo</h2>
+            <p class="text-muted mb-0">OAuth 2.0 / IdentityServer4 Token Akışı Görüntüleyici</p>
+        </div>
+        <div class="text-end">
+            <small class="text-muted d-block">Sunucu Saati: @Model.ServerTimeLocal.ToString("HH:mm:ss")</small>
+            <form asp-action="RefreshToken" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-success btn-sm">
+                    <i class="bi bi-arrow-repeat"></i> Token Yenile
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (TempData["RefreshSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["RefreshSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["RefreshError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["RefreshError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Token Cards - Full Width -->
+        <div class="col-12">
+            <!-- User Access Token -->
+            <div class="card token-card border-0 shadow-sm">
+                <div class="token-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-person-badge"></i> User Access Token
+                        <span class="info-icon ms-1" title="Resource Owner Password Credential (ROPC) grant ile alınan kullanıcı token'ı">?</span>
+                    </div>
+                    <div>
+                        @if (Model.UserTokenDecoded != null)
+                        {
+                            var badgeClass = Model.IsExpired ? "badge-expire-danger" : 
+                                             Model.TotalMinutesRemaining < 5 ? "badge-expire-warn" : 
+                                             Model.TotalMinutesRemaining < 30 ? "badge-expire-warn" : "badge-expire-ok";
+                            <span class="badge @badgeClass">
+                                @if (Model.IsExpired)
+                                {
+                                    <i class="bi bi-exclamation-triangle"></i> <text>EXPIRED!</text>
+                                }
+                                else
+                                {
+                                    @Model.UserTokenExpiresIn <text> kaldı</text>
+                                }
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div class="token-body">
+                    @if (!string.IsNullOrEmpty(Model.UserAccessToken))
+                    {
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label text-muted small mb-0">Raw Token (Cookie'den)</label>
+                                <div>
+                                    <button class="btn btn-sm btn-copy" onclick="copyToClipboard('userAccessToken')" title="Kopyala">
+                                        <i class="bi bi-clipboard"></i> Kopyala
+                                    </button>
+                                    <a href="https://jwt.io/#debugger-io?token=@Model.UserAccessToken" target="_blank" class="btn btn-sm btn-jwtio" title="jwt.io'da Aç">
+                                        <i class="bi bi-box-arrow-up-right"></i> jwt.io
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="token-raw" id="userAccessToken">@Model.UserAccessToken</div>
+                        </div>
+
+                        @if (Model.UserTokenDecoded != null)
+                        {
+                            <div class="d-flex gap-4 small">
+                                <span><strong>Issued At:</strong> @Model.UserTokenDecoded.IssuedAt.AddHours(3).ToString("yyyy-MM-dd HH:mm:ss") (GMT+3)</span>
+                                <span><strong>Expires:</strong> @Model.UserTokenDecoded.Expires.AddHours(3).ToString("yyyy-MM-dd HH:mm:ss") (GMT+3)</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mb-0">User token bulunamadı. Giriş yapmanız gerekiyor.</div>
+                    }
+                </div>
+            </div>
+
+            <!-- Refresh Token -->
+            <div class="card token-card border-0 shadow-sm">
+                <div class="token-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-arrow-repeat"></i> Refresh Token
+                        <span class="info-icon ms-1" title="Access token süresi dolduğunda yeni token almak için kullanılır">?</span>
+                    </div>
+                    @if (Model.RefreshTokenInfo != null && !Model.RefreshTokenInfo.IsExpired)
+                    {
+                        <span class="badge bg-light text-success">
+                            @Model.RefreshTokenInfo.RemainingDays gün @Model.RefreshTokenInfo.RemainingHours saat kaldı
+                        </span>
+                    }
+                </div>
+                <div class="token-body">
+                    @if (!string.IsNullOrEmpty(Model.UserRefreshToken))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-muted small">Opaque Token (JWT değil - decode edilemez)</span>
+                            <button class="btn btn-sm btn-copy" onclick="copyToClipboard('refreshToken')" title="Kopyala">
+                                <i class="bi bi-clipboard"></i> Kopyala
+                            </button>
+                        </div>
+                        <div class="token-raw" id="refreshToken">@Model.UserRefreshToken</div>
+
+                        @if (Model.RefreshTokenInfo != null)
+                        {
+                            <div class="mt-3 p-3 rounded" style="background: #21262d; border: 1px solid #30363d;">
+                                <div class="row small">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Token Türü:</strong> <code>@Model.RefreshTokenInfo.TokenType</code></p>
+                                        <p class="mb-1"><strong>Token Uzunluğu:</strong> @Model.RefreshTokenInfo.TokenLength karakter</p>
+                                        <p class="mb-1"><strong>Kullanım:</strong> @Model.RefreshTokenInfo.UsagePolicy</p>
+                                        <p class="mb-0"><strong>Süre Politikası:</strong> @Model.RefreshTokenInfo.ExpirationPolicy</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Oluşturulma:</strong> @Model.RefreshTokenInfo.IssuedAt (GMT+3)</p>
+                                        <p class="mb-1"><strong>Bitiş:</strong> @Model.RefreshTokenInfo.ExpiresAt (GMT+3)</p>
+                                        <p class="mb-1"><strong>Toplam Süre:</strong> @Model.RefreshTokenInfo.ConfiguredLifetimeDays gün</p>
+                                        <p class="mb-0">
+                                            <strong>Kalan:</strong> 
+                                            @if (Model.RefreshTokenInfo.IsExpired)
+                                            {
+                                                <span class="text-danger">EXPIRED!</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success">@Model.RefreshTokenInfo.RemainingDays gün @Model.RefreshTokenInfo.RemainingHours saat @Model.RefreshTokenInfo.RemainingMinutes dk</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mb-0">Refresh token bulunamadı.</div>
+                    }
+                </div>
+            </div>
+
+                        <!-- Client Credential Token -->
+            <div class="card token-card border-0 shadow-sm">
+                <div class="token-header bg-warning text-dark">
+                    <i class="bi bi-robot"></i> Client Credential Token (Machine-to-Machine)
+                    <span class="info-icon ms-1" title="MVC uygulamasının API'lere erişmek için kullandığı makine token'ı">?</span>
+                </div>
+                <div class="token-body">
+                    @if (!string.IsNullOrEmpty(Model.ClientCredentialToken))
+                    {
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label text-muted small mb-0">Raw Token</label>
+                                <div>
+                                    <button class="btn btn-sm btn-copy" onclick="copyToClipboard('clientToken')" title="Kopyala">
+                                        <i class="bi bi-clipboard"></i> Kopyala
+                                    </button>
+                                    <a href="https://jwt.io/#debugger-io?token=@Model.ClientCredentialToken" target="_blank" class="btn btn-sm btn-jwtio" title="jwt.io'da Aç">
+                                        <i class="bi bi-box-arrow-up-right"></i> jwt.io
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="token-raw" id="clientToken">@Model.ClientCredentialToken</div>
+                        </div>
+
+                        @if (Model.ClientTokenDecoded != null)
+                        {
+                            <div class="d-flex gap-4 small">
+                                <span><strong>Issued At:</strong> @Model.ClientTokenDecoded.IssuedAt.AddHours(3).ToString("yyyy-MM-dd HH:mm:ss") (GMT+3)</span>
+                                <span><strong>Expires:</strong> @Model.ClientTokenDecoded.Expires.AddHours(3).ToString("yyyy-MM-dd HH:mm:ss") (GMT+3)</span>
+                            </div>
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(Model.ClientCredentialError))
+                    {
+                        <div class="alert alert-danger mb-0">Hata: @Model.ClientCredentialError</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- Cookie Information -->
+            @if (Model.AuthCookieInfo != null)
+            {
+            <div class="card token-card border-0 shadow-sm">
+                <div class="token-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-cookie"></i> Cookie Bilgileri (Dinamik)</span>
+                    <span>
+                        @if (Model.AuthCookieInfo.IsPersistent)
+                        {
+                            <span class="badge bg-success">Kalıcı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Session</span>
+                        }
+                    </span>
+                </div>
+                <div class="token-body">
+                    <!-- Configuration Section -->
+                    <h6 class="text-info mb-2"><i class="bi bi-gear"></i> Konfigürasyon (Program.cs'den)</h6>
+                    <table class="table table-sm claim-table mb-3">
+                        <tbody>
+                            <tr>
+                                <td class="claim-type">Cookie Adı</td>
+                                <td><code>@Model.AuthCookieInfo.Name</code></td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Konfigüre Süre</td>
+                                <td>
+                                    <strong>
+                                        @if (Model.AuthCookieInfo.ConfiguredLifetimeDays > 0)
+                                        {
+                                            @($"{Model.AuthCookieInfo.ConfiguredLifetimeDays} gün")
+                                        }
+                                        @if (Model.AuthCookieInfo.ConfiguredLifetimeHours > 0)
+                                        {
+                                            @($" {Model.AuthCookieInfo.ConfiguredLifetimeHours} saat")
+                                        }
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">HttpOnly</td>
+                                <td>
+                                    @if (Model.AuthCookieInfo.IsHttpOnly)
+                                    {
+                                        <span class="badge bg-success">Evet</span>
+                                        <small class="text-muted">(JS erişemez)</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Hayır</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">SameSite</td>
+                                <td><code>@Model.AuthCookieInfo.SameSite</code></td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Path</td>
+                                <td><code>@Model.AuthCookieInfo.Path</code></td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Sliding Expiration</td>
+                                <td>
+                                    @if (Model.AuthCookieInfo.SlidingExpiration)
+                                    {
+                                        <span class="badge bg-info">Aktif</span>
+                                        <small class="text-muted">(Her istek süreyi uzatır)</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Kapalı</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">LoginPath</td>
+                                <td><code>@Model.AuthCookieInfo.LoginPath</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Runtime Section -->
+                    <h6 class="text-warning mb-2"><i class="bi bi-activity"></i> Runtime Bilgileri</h6>
+                    <table class="table table-sm claim-table mb-3">
+                        <tbody>
+                            <tr>
+                                <td class="claim-type">Durum</td>
+                                <td>
+                                    @if (Model.AuthCookieInfo.Exists)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Yok</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Kalıcı (Persistent)</td>
+                                <td>
+                                    @if (Model.AuthCookieInfo.IsPersistent)
+                                    {
+                                        <span class="badge bg-success">Evet</span>
+                                        <small class="text-muted">(Tarayıcı kapansa da kalır)</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Hayır (Session)</span>
+                                        <small class="text-muted">(Tarayıcı kapanınca silinir)</small>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Secure</td>
+                                <td>
+                                    @if (Model.AuthCookieInfo.IsSecure)
+                                    {
+                                        <span class="badge bg-success">Evet (HTTPS)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Hayır (HTTP)</span>
+                                    }
+                                </td>
+                            </tr>
+                            @if (!string.IsNullOrEmpty(Model.AuthCookieInfo.IssuedAt))
+                            {
+                            <tr>
+                                <td class="claim-type">Oluşturulma</td>
+                                <td>@Model.AuthCookieInfo.IssuedAt</td>
+                            </tr>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.AuthCookieInfo.ExpiresAt))
+                            {
+                            <tr>
+                                <td class="claim-type">Bitiş Tarihi</td>
+                                <td>@Model.AuthCookieInfo.ExpiresAt</td>
+                            </tr>
+                            <tr>
+                                <td class="claim-type">Kalan Süre</td>
+                                <td><span class="badge bg-primary">@Model.AuthCookieInfo.ExpiresIn</span></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- Stored Tokens Section -->
+                    @if (Model.AuthCookieInfo.StoredTokens?.Any() == true)
+                    {
+                    <h6 class="text-success mb-2">
+                        <i class="bi bi-box-seam"></i> Cookie İçindeki Token'lar 
+                        <span class="badge bg-success">@Model.AuthCookieInfo.StoredTokens.Count adet</span>
+                    </h6>
+                    <div class="p-2 rounded" style="background: #21262d; border: 1px solid #30363d;">
+                        <table class="table table-sm claim-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted" style="width:22%;">Token Adı</th>
+                                    <th class="text-muted" style="width:12%;">Tipi</th>
+                                    <th class="text-muted" style="width:12%;">Uzunluk</th>
+                                    <th class="text-muted" style="width:30%;">Değer (kısaltılmış)</th>
+                                    <th class="text-muted text-end" style="width:24%;">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var tokenIndex = 0; }
+                                @foreach (var token in Model.AuthCookieInfo.StoredTokens)
+                                {
+                                <tr>
+                                    <td><code>@token.Name</code></td>
+                                    <td>
+                                        @if (token.Type == "JWT")
+                                        {
+                                            <span class="badge bg-primary">JWT</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Opaque</span>
+                                        }
+                                    </td>
+                                    <td><small>@token.Length</small></td>
+                                    <td><code class="small" style="font-size:10px;">@token.Value</code></td>
+                                    <td class="text-end">
+                                        <!-- Hidden full value for copy -->
+                                        <span id="cookieToken_@tokenIndex" style="display:none;">@token.FullValue</span>
+                                        <button class="btn btn-sm btn-outline-light py-0 px-2" onclick="copyToClipboard('cookieToken_@tokenIndex')" title="Kopyala">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                        @if (token.Type == "JWT")
+                                        {
+                                        <a href="https://jwt.io/#debugger-io?token=@token.FullValue" target="_blank" class="btn btn-sm btn-outline-info py-0 px-2 ms-1" title="jwt.io'da aç">
+                                            <i class="bi bi-box-arrow-up-right"></i> jwt.io
+                                        </a>
+                                        }
+                                    </td>
+                                </tr>
+                                tokenIndex++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <small class="text-muted mt-2 d-block">
+                        <i class="bi bi-info-circle"></i> Bu token'lar cookie içinde <strong>Data Protection API</strong> ile şifreli saklanır.
+                    </small>
+                    }
+                </div>
+            </div>
+            }
+
+    <!-- Developer Note: Token Refresh Issue -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert d-flex align-items-center mb-0" role="alert" style="background: #392807; color: #ffdc75; border: 1px solid #61440b; border-radius: 8px;">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <strong>👨‍💻 Geliştirici Notu (Token Yenileme Sorunu):</strong>
+                    <p class="mb-0 mt-1 small">
+                        Geliştirme ortamında (Development) IdentityServer <strong>In-Memory Database (RAM)</strong> kullandığı için, proje yeniden başlatıldığında 
+                        tüm kayıtlı Refresh Token'lar silinir. Tarayıcınızdaki eski Refresh Token sunucuda bulunamayacağı için 
+                        yenileme işlemi başarısız olabilir ("invalid_grant"). Bu durumda çıkış yapıp tekrar giriş yapmanız gerekir.
+                        Canlı ortamda (Production) gerçek veritabanı kullanılacağı için bu sorun yaşanmaz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        const text = element.innerText;
+        
+        // Try modern API first, fallback to old method for HTTP
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopySuccess(event.target.closest('button'));
+            }).catch(err => {
+                fallbackCopy(text, event.target.closest('button'));
+            });
+        } else {
+            fallbackCopy(text, event.target.closest('button'));
+        }
+    }
+    
+    function fallbackCopy(text, btn) {
+        // Fallback for HTTP - uses textarea + execCommand
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showCopySuccess(btn);
+        } catch (err) {
+            console.error('Fallback kopyalama hatası:', err);
+            alert('Kopyalama başarısız oldu');
+        }
+        document.body.removeChild(textArea);
+    }
+    
+    function showCopySuccess(btn) {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> Kopyalandı!';
+        btn.style.background = '#238636';
+        btn.style.borderColor = '#238636';
+        btn.style.color = '#fff';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+        }, 2000);
+    }
+</script>
+}

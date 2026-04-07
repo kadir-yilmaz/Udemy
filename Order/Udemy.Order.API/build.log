@@ -1,0 +1,20 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Udemy.Order.Domain -> c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Domain\bin\Debug\net8.0\Udemy.Order.Domain.dll
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Migrations\20251221223009_init.cs(9,26): warning CS8981: The type name 'init' only contains lower-cased ascii characters. Such names may become reserved for the language. [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Udemy.Order.Infrastructure.csproj]
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Migrations\20251221223009_init.Designer.cs(16,19): warning CS8981: The type name 'init' only contains lower-cased ascii characters. Such names may become reserved for the language. [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Udemy.Order.Infrastructure.csproj]
+  Udemy.Order.Infrastructure -> c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\bin\Debug\net8.0\Udemy.Order.Infrastructure.dll
+  Udemy.Order.Application -> c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Application\bin\Debug\net8.0\Udemy.Order.Application.dll
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Controllers\OrdersController.cs(14,26): error CS0246: The type or namespace name 'IMediator' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Udemy.Order.API.csproj]
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Controllers\OrdersController.cs(16,33): error CS0246: The type or namespace name 'IMediator' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Udemy.Order.API.csproj]
+
+Build FAILED.
+
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Migrations\20251221223009_init.cs(9,26): warning CS8981: The type name 'init' only contains lower-cased ascii characters. Such names may become reserved for the language. [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Udemy.Order.Infrastructure.csproj]
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Migrations\20251221223009_init.Designer.cs(16,19): warning CS8981: The type name 'init' only contains lower-cased ascii characters. Such names may become reserved for the language. [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.Infrastructure\Udemy.Order.Infrastructure.csproj]
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Controllers\OrdersController.cs(14,26): error CS0246: The type or namespace name 'IMediator' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Udemy.Order.API.csproj]
+c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Controllers\OrdersController.cs(16,33): error CS0246: The type or namespace name 'IMediator' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\kadir\OneDrive\Desktop\Udemy\Order\Udemy.Order.API\Udemy.Order.API.csproj]
+    2 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.45

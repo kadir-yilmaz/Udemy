@@ -1,0 +1,53 @@
+## [Visual Studio]
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## [JetBrains (Rider)]
+.idea/
+*.sln.iml
+
+## [Docker]
+.docker/
+docker-compose.override.yml*
+[Dd]ocker-compose.vs.debug.g.yml
+[Dd]ocker-compose.vs.release.g.yml
+
+## [Kubernetes]
+.kube/
+*.kubeconfig
+
+## [Environment Variables]
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+## [OS specific]
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+## [NuGet]
+packages/
+*.nupkg
+# Restore symbol files
+*.pdb
+# NuGet core
+project.lock.json
+project.assets.json
+
+## [Publishing]
+*.publish.xml
+*.pubxml
+*.pubxml.user
+# Local Infrastructure
+actions-runner-k8s/
+k8s/secrets.yaml

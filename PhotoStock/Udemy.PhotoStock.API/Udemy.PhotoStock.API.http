@@ -1,0 +1,6 @@
+@Udemy.PhotoStock.API_HostAddress = http://localhost:5177
+
+GET {{Udemy.PhotoStock.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
