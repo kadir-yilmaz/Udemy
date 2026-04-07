@@ -104,7 +104,9 @@
                     <a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id" class="text-decoration-none">
                         <div class="card course-card h-100">
                             <div class="course-image-wrapper">
-                                <img src="@(item.StockPictureUrl ?? "https://via.placeholder.com/480x270?text=Kurs+Resmi")" alt="@item.Name">
+                                <img src="@(item.StockPictureUrl ?? "https://via.placeholder.com/480x270?text=Kurs+Resmi")"
+                                     alt="@item.Name"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/480x270?text=Kurs+Resmi';">
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="course-title">@item.Name</h5>

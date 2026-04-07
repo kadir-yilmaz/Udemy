@@ -54,6 +54,11 @@ jobs:
     - name: Apply Application Manifests
       shell: powershell
       run: |
+        kubectl apply -f k8s/secrets.yaml
+        if ($LASTEXITCODE -ne 0) {
+          throw "kubectl apply failed for k8s/secrets.yaml"
+        }
+
         kubectl apply -f k8s/infrastructure/redis-basket.yaml
         if ($LASTEXITCODE -ne 0) {
           throw "kubectl apply failed for k8s/infrastructure/redis-basket.yaml"

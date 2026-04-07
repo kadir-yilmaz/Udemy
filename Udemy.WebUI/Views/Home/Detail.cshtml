@@ -129,6 +129,7 @@
             <!-- Course Image (Mobile Only) -->
             <div class="d-lg-none mb-4">
                 <img src="@(Model.StockPictureUrl ?? "https://via.placeholder.com/750x422?text=Kurs+Resmi")" 
+                     onerror="this.onerror=null;this.src='https://via.placeholder.com/750x422?text=Kurs+Resmi';"
                      class="img-fluid rounded" alt="@Model.Name">
             </div>
 
@@ -259,6 +260,7 @@
                 <div class="course-card">
                     <!-- Course Image (Desktop) -->
                     <img src="@(Model.StockPictureUrl ?? "https://via.placeholder.com/750x422?text=Kurs+Resmi")" 
+                         onerror="this.onerror=null;this.src='https://via.placeholder.com/750x422?text=Kurs+Resmi';"
                          class="course-image-preview d-none d-lg-block" alt="@Model.Name">
                     
                     <div class="p-3">

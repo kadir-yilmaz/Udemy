@@ -19,32 +19,28 @@ namespace Udemy.WebUI.Controllers
 
         public async Task<IActionResult> Checkout()
         {
-            var basket = await _basketService.Get();
-            ViewBag.basket = basket;
+            await PopulateCheckoutViewAsync();
             return View(new CheckoutInfoInput());
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutInfoInput checkoutInfoInput)
         {
-            // 1. yol: senkron iletişim
-            // var orderStatus = await _orderService.CreateOrder(checkoutInfoInput);
+            if (!ModelState.IsValid)
+            {
+                await PopulateCheckoutViewAsync();
+                return View(checkoutInfoInput);
+            }
 
-            // 2. yol: asenkron iletişim (RabbitMQ)
             var orderSuspend = await _orderService.SuspendOrder(checkoutInfoInput);
 
             if (!orderSuspend.IsSuccessful)
             {
-                var basket = await _basketService.Get();
-                ViewBag.basket = basket;
+                await PopulateCheckoutViewAsync();
                 ViewBag.error = orderSuspend.Error;
-                return View();
+                return View(checkoutInfoInput);
             }
 
-            // 1. yol: senkron iletişim
-            // return RedirectToAction(nameof(SuccessfulCheckout), new { orderId = orderStatus.OrderId });
-
-            // 2. yol: asenkron iletişim
             var orderId = new Random().Next(1, 1000);
             TempData["OrderSuccess"] = true;
             TempData["OrderId"] = orderId;
@@ -60,6 +56,21 @@ namespace Udemy.WebUI.Controllers
         public async Task<IActionResult> CheckoutHistory()
         {
             return View(await _orderService.GetOrder());
+        }
+
+        private async Task PopulateCheckoutViewAsync()
+        {
+            var basket = await _basketService.Get();
+            ViewBag.basket = basket;
+
+            ViewBag.ExpireMonths = Enumerable.Range(1, 12)
+                .Select(x => x.ToString("00"))
+                .ToList();
+
+            var currentYear = DateTime.UtcNow.Year % 100;
+            ViewBag.ExpireYears = Enumerable.Range(currentYear, 10)
+                .Select(x => x.ToString("00"))
+                .ToList();
         }
     }
 }

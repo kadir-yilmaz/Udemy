@@ -8,6 +8,8 @@ using Udemy.FakePayment.API.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>(optional: true);
+
 // Iyzipay Settings
 builder.Services.Configure<IyzipaySettings>(
     builder.Configuration.GetSection("Iyzipay"));

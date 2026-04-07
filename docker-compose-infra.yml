@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  udemy-basket-redis:
+    image: redis:7
+    container_name: udemy-basket-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - udemy-basket-redis-data:/data
+
   udemy-mongodb:
     image: mongo:latest
     container_name: udemy-catalog-mongodb
@@ -60,6 +68,7 @@ services:
       - udemy-rabbitmq-data:/var/lib/rabbitmq
 
 volumes:
+  udemy-basket-redis-data:
   udemy-catalog-mongodb-data:
   udemy-discount-postgres-data:
   udemy-order-sqlserver-data:

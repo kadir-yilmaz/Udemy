@@ -29,7 +29,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td><img style="width:60px; height:40px; object-fit:cover;" src="@(item.StockPictureUrl ?? "https://via.placeholder.com/60x40?text=Yok")" class="rounded" /></td>
+                            <td><img style="width:60px; height:40px; object-fit:cover;" src="@(item.StockPictureUrl ?? "https://via.placeholder.com/60x40?text=Yok")" class="rounded" onerror="this.onerror=null;this.src='https://via.placeholder.com/60x40?text=Yok';" /></td>
                             <td class="fw-semibold">@item.Name</td>
                             <td>@item.Price TL</td>
                             <td>@item.Feature?.Duration saat</td>

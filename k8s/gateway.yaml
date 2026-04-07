@@ -29,7 +29,7 @@ spec:
             memory: "256Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
+          value: "Kubernetes"
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: IdentityServerURL

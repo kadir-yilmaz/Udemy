@@ -40,6 +40,21 @@ namespace Udemy.FakePayment.API.Controllers
         {
             Console.WriteLine("[FakePaymentsController] POST ReceivePayment called.");
             Console.WriteLine($"[FakePaymentsController] Card: {paymentDto.CardNumber}, Amount: {paymentDto.TotalPrice}");
+
+            if (string.IsNullOrWhiteSpace(_iyzipayOptions.ApiKey) || string.IsNullOrWhiteSpace(_iyzipayOptions.SecretKey))
+            {
+                Console.WriteLine("[FakePaymentsController] ℹ️ Iyzipay keys are empty. Using local simulation mode.");
+
+                await _publishEndpoint.Publish(new PaymentCompleted { OrderId = paymentDto.OrderId });
+                await PublishInvoiceEvent(paymentDto, paymentDto.TotalPrice);
+
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Simulated payment succeeded",
+                    PaymentId = $"SIM-{paymentDto.OrderId}"
+                });
+            }
             
             // 💰 0 TL kontrolü - ücretsiz satın alma (iyzico 0 TL kabul etmiyor)
             if (paymentDto.TotalPrice <= 0)

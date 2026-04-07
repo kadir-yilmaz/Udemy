@@ -38,6 +38,16 @@ spec:
           value: "host.docker.internal"
         - name: RabbitMQPort
           value: "5673"
+        - name: Iyzipay__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: IYZIPAY_API_KEY
+        - name: Iyzipay__SecretKey
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: IYZIPAY_SECRET_KEY
 ---
 apiVersion: v1
 kind: Service

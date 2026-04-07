@@ -88,13 +88,6 @@ namespace Udemy.WebUI.Services.Concrete
             var orderId = orderCreatedViewModel?.OrderId ?? 0;
 
             // 2️⃣ ŞİMDİ ÖDEME AL (OrderId ile birlikte)
-            // Expiration formatı: "MM/YY" veya "MM/YYYY" - parse et
-            var expirationParts = checkoutInfoInput.Expiration?.Split('/') ?? new[] { "12", "30" };
-            var expireMonth = expirationParts.Length > 0 ? expirationParts[0] : "12";
-            var expireYear = expirationParts.Length > 1 ? expirationParts[1] : "30";
-            // 2 haneli yılı 4 haneliye çevir
-            if (expireYear.Length == 2) expireYear = "20" + expireYear;
-            
             // Kart isminden ad-soyad ayırma
             var nameParts = checkoutInfoInput.CardName?.Split(' ') ?? new[] { "Ad", "Soyad" };
             var firstName = nameParts.Length > 0 ? nameParts[0] : "Ad";
@@ -104,8 +97,8 @@ namespace Udemy.WebUI.Services.Concrete
             {
                 CardName = checkoutInfoInput.CardName,
                 CardNumber = checkoutInfoInput.CardNumber,
-                ExpireMonth = expireMonth,
-                ExpireYear = expireYear,
+                ExpireMonth = checkoutInfoInput.ExpireMonth,
+                ExpireYear = "20" + checkoutInfoInput.ExpireYear,
                 CVV = checkoutInfoInput.CVV,
                 TotalPrice = basket.TotalPrice,
                 OrderId = orderId, // Artık gerçek OrderId
@@ -125,10 +118,9 @@ namespace Udemy.WebUI.Services.Concrete
 
             var paymentResult = await _paymentService.ReceivePayment(paymentInfo);
             
-            if (!paymentResult)
+            if (!paymentResult.IsSuccess)
             {
-                // TODO: Order.API'ye status = Failed güncelle
-                return new OrderCreatedViewModel() { Error = "Ödeme başarısız", IsSuccessful = false };
+                return new OrderCreatedViewModel() { Error = paymentResult.ErrorMessage ?? "Odeme basarisiz", IsSuccessful = false };
             }
 
             // 3️⃣ ÖDEME BAŞARILI - Sepeti temizle

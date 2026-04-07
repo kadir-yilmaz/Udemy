@@ -5,6 +5,6 @@ namespace Udemy.WebUI.Services.Abstract
 {
     public interface IPaymentService
     {
-        Task<bool> ReceivePayment(PaymentInfoInput paymentInfoInput);
+        Task<(bool IsSuccess, string? ErrorMessage)> ReceivePayment(PaymentInfoInput paymentInfoInput);
     }
 }

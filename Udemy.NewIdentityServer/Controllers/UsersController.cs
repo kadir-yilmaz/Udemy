@@ -26,6 +26,12 @@ namespace Udemy.NewIdentityServer.Controllers
         {
             try
             {
+                var existingUser = await _userManager.FindByEmailAsync(signupDto.Email);
+                if (existingUser != null)
+                {
+                    return BadRequest(new { Errors = new List<string> { "This email is already taken." } });
+                }
+
                 var user = new ApplicationUser
                 {
                     UserName = signupDto.UserName,
