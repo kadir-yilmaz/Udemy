@@ -63,6 +63,11 @@ kubectl get pods
 kubectl get services
 ```
 
+### Tarayıcı Erişimi (K8s):
+- **WebUI:** `http://localhost:30075`
+- **Gateway:** `http://localhost:30000`
+- **IdentityServer:** `http://localhost:30001`
+
 ---
 
 ## 6. Önemli Notlar

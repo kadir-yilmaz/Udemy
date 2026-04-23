@@ -22,7 +22,7 @@ Projenin yaşam döngüsü, GitHub ve yerel altyapının entegre çalıştığı
 ## Client
 
 ### WebUI
-- **Port:** `5075`
+- **Port:** `5075` (Docker) / `30075` (K8s NodePort)
 - **Teknoloji:** ASP.NET Core MVC
 - **Önemli Bilgiler:** Kullanıcı dostu arayüzü ile sepet yönetimi, ürün katalog takibi ve sipariş süreçlerini uçtan uca sunar.
 
@@ -31,12 +31,12 @@ Projenin yaşam döngüsü, GitHub ve yerel altyapının entegre çalıştığı
 ## Gateway & Identity Management
 
 ### Ocelot Gateway
-- **Port:** `5000`
+- **Port:** `5000` (Docker) / `30000` (K8s NodePort)
 - **Teknoloji:** Ocelot API Gateway
 - **Önemli Bilgiler:** Merkezi giriş noktasıdır. Downstream ve Upstream servis yönlendirmelerini yönetir.
 
 ### IdentityServer (Identity Management)
-- **Port:** `5001`
+- **Port:** `5001` (Docker) / `30001` (K8s NodePort)
 - **DB:** SQL Server (Port: `1445`)
 - **Teknoloji:** IdentityServer4, ASP.NET Core Identity
 - **Önemli Bilgiler:** OAuth2 ve OpenID Connect standartlarında kimlik doğrulama sağlar.
