@@ -99,6 +99,7 @@ Projenin yaşam döngüsü, GitHub ve yerel altyapının entegre çalıştığı
 ### Dağıtım Yapısı
 - **Altyapı Script'i:** `k8s/scripts/start-infra.ps1` (Veritabanları ve K8s Secret'ları hazırlar)
 - **Uygulama Script'i:** `k8s/scripts/deploy-apps.ps1` (Mikroservisleri build eder ve deploy eder)
+- **Redis Failover Script'i:** `k8s/scripts/redis-sentinel-failover.ps1` (Redis Sentinel yapılandırmasını yönetir)
 - **Kubernetes (K8s):** `k8s/` dizini altında her servis için Deployment ve Service tanımları bulunmaktadır.
 - **GitHub Actions:** `.github/workflows/deploy-local.yml` üzerinden yerel veya uzak ortamlara otomatik deployment imkanı sunar.
 - **Docker Compose:** Geliştirme ortamını tek komutla ayağa kaldırmak için `docker-compose.yml` dosyası kullanılabilir.
