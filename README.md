@@ -97,6 +97,7 @@ Projenin yaşam döngüsü, GitHub ve yerel altyapının entegre çalıştığı
 | **Redis** | `6379` | Dağıtık önbellekleme ve sepet yönetimi. |
 
 ### Dağıtım Yapısı
+- **Otomatik Script:** `./deploy-local.ps1` komutu ile tüm altyapıyı ve mikroservisleri tek seferde ayağa kaldırabilirsiniz.
 - **Kubernetes (K8s):** `k8s/` dizini altında her servis için Deployment ve Service tanımları bulunmaktadır.
 - **GitHub Actions:** `.github/workflows/deploy-local.yml` üzerinden yerel veya uzak ortamlara otomatik deployment imkanı sunar.
 - **Docker Compose:** Geliştirme ortamını tek komutla ayağa kaldırmak için `docker-compose.yml` dosyası kullanılabilir.

@@ -56,6 +56,12 @@ cd d:\Kadir\Projeler\Udemy\actions-runner-k8s
 ```
 *Bu komut çalıştıktan sonra GitHub'daki workflow "Waiting for a runner..." durumundan "Running" durumuna geçecektir.*
 
+### 5.2. Manuel Yerel Deploy (Alternatif)
+GitHub'a push yapmadan veya runner ile uğraşmadan tüm süreci yerelde başlatmak isterseniz ana dizinde şu script'i çalıştırabilirsiniz:
+```powershell
+./deploy-local.ps1
+```
+
 ### Kubernetes Durumunu Kontrol Etme:
 Her şeyin yolunda olduğunu doğrulamak için:
 ```powershell
