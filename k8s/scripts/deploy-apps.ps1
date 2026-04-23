@@ -1,9 +1,9 @@
-# Udemy Microservices - Tek Tıkla Yerel Deploy Script'i
+# Udemy Microservices - Uygulama Deployment Script'i
+# Bu script mikroservisleri build eder ve K8s üzerine deploy eder.
 
-Write-Host "`n>>> 1. Altyapı Servisleri Başlatılıyor (Docker Compose)..." -ForegroundColor Cyan
-docker compose -f docker-compose-infra.yml up -d
+$rootDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
-Write-Host "`n>>> 2. Docker İmajları Build Ediliyor (Bu biraz vakit alabilir)..." -ForegroundColor Cyan
+Write-Host "`n>>> [BUILD] Docker İmajları Build Ediliyor..." -ForegroundColor Cyan
 $images = @(
     @{ Name = "identityserver"; Dockerfile = "Udemy.NewIdentityServer/Dockerfile" },
     @{ Name = "gateway"; Dockerfile = "Udemy.Gateway/Dockerfile" },
@@ -19,31 +19,24 @@ $images = @(
 
 foreach ($image in $images) {
     Write-Host "Building $($image.Name)..." -ForegroundColor Yellow
-    docker build -t "$($image.Name):latest" -f $image.Dockerfile .
+    docker build -t "$($image.Name):latest" -f "$rootDir/$($image.Dockerfile)" "$rootDir"
     if ($LASTEXITCODE -ne 0) {
         Write-Host "HATA: $($image.Name) build edilemedi!" -ForegroundColor Red
         exit $LASTEXITCODE
     }
 }
 
-Write-Host "`n>>> 3. Kubernetes Manifestleri Uygulanıyor..." -ForegroundColor Cyan
-# Önce secret ve infrastructure (bazı dosyalar dizin içinde olabilir, hata almamak için tek tek veya dizin olarak apply ediyoruz)
-kubectl apply -f k8s/secrets.yaml
-if (Test-Path "k8s/infrastructure") {
-    kubectl apply -f k8s/infrastructure/
+Write-Host "`n>>> [K8S] Uygulama Manifestleri Uygulanıyor..." -ForegroundColor Cyan
+# Sadece ana dizindeki servisleri apply et (infrastructure'ı start-infra scripti hallediyor)
+Get-ChildItem -Path "$rootDir/k8s/*.yaml" | ForEach-Object {
+    kubectl apply -f $_.FullName
 }
 
-# Tüm ana manifestler
-kubectl apply -f k8s/
-
-Write-Host "`n>>> 4. Servisler Yeniden Başlatılıyor (Rollout Restart)..." -ForegroundColor Cyan
+Write-Host "`n>>> [K8S] Servisler Yeniden Başlatılıyor..." -ForegroundColor Cyan
 $deployments = @("identityserver", "gateway", "catalog-api", "photostock-api", "basket-api", "discount-api", "order-api", "fakepayment-api", "invoice-api", "webui")
 foreach ($deploy in $deployments) {
-    Write-Host "Restarting $deploy..." -ForegroundColor Gray
     kubectl rollout restart "deployment/$deploy"
 }
 
-Write-Host "`n>>> İŞLEM BAŞARIYLA TAMAMLANDI! <<<" -ForegroundColor Green
-Write-Host "WebUI: http://localhost:30075" -ForegroundColor White
-Write-Host "Gateway: http://localhost:30000" -ForegroundColor White
-Write-Host "IdentityServer: http://localhost:30001`n" -ForegroundColor White
+Write-Host "`n>>> Uygulamalar Yayına Alındı! <<<" -ForegroundColor Green
+Write-Host "WebUI: http://localhost:30075`n" -ForegroundColor White
